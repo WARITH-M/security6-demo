@@ -1,0 +1,9855 @@
+1
+00:00:00,133 --> 00:00:01,499
+what's going on guys it's ellam
+
+2
+00:00:01,500 --> 00:00:03,366
+welcome welcome to amigo scout
+
+3
+00:00:03,366 --> 00:00:05,199
+in this video
+
+4
+00:00:05,333 --> 00:00:06,933
+you're going to learn pretty much
+
+5
+00:00:06,933 --> 00:00:07,866
+everything you need to know
+
+6
+00:00:07,900 --> 00:00:11,400
+about jay ability using spring boot 3
+
+7
+00:00:11,400 --> 00:00:13,400
+so about 3 weeks ago
+
+8
+00:00:13,400 --> 00:00:16,266
+we posted a crash course on spring security
+
+9
+00:00:16,266 --> 00:00:19,466
+and there was a lag with JD blue tees section
+
+10
+00:00:19,566 --> 00:00:22,366
+so we decided to re record the entire section
+
+11
+00:00:22,533 --> 00:00:24,533
+and actually make it so extensive
+
+12
+00:00:24,533 --> 00:00:27,766
+this crash course right here is about to you by alibu
+
+13
+00:00:27,766 --> 00:00:30,299
+and is the one that led the spring security
+
+14
+00:00:30,300 --> 00:00:32,300
+so go ahead and subscribe to this channel
+
+15
+00:00:32,300 --> 00:00:34,900
+show some love because it's gonna be bringing you
+
+16
+00:00:35,000 --> 00:00:36,533
+awesome content like this
+
+17
+00:00:36,666 --> 00:00:37,766
+from time to time
+
+18
+00:00:37,766 --> 00:00:39,966
+security is a must when
+
+19
+00:00:40,200 --> 00:00:41,866
+designing and building apis
+
+20
+00:00:41,866 --> 00:00:44,933
+and it's really important that you understand JWT
+
+21
+00:00:45,200 --> 00:00:48,533
+so that you can secure your apis before we crack on
+
+22
+00:00:48,666 --> 00:00:51,866
+literally just take one 2nd and smash that like button
+
+23
+00:00:51,933 --> 00:00:54,133
+also if you new to the channel subscribe
+
+24
+00:00:54,133 --> 00:00:55,366
+and if you haven't joined the
+
+25
+00:00:55,366 --> 00:00:57,499
+private Facebook group as LS discord
+
+26
+00:00:57,500 --> 00:00:58,600
+go ahead and join
+
+27
+00:00:58,700 --> 00:01:00,500
+because the community is growing
+
+28
+00:01:00,566 --> 00:01:02,099
+and we're waiting for you
+
+29
+00:01:02,800 --> 00:01:03,333
+so
+
+30
+00:01:03,333 --> 00:01:04,199
+without further ado
+
+31
+00:01:04,533 --> 00:01:05,366
+let's get off
+
+32
+00:01:13,166 --> 00:01:14,066
+I just want to say that
+
+33
+00:01:14,066 --> 00:01:15,933
+you can grab the entire source code
+
+34
+00:01:15,933 --> 00:01:17,533
+and the description of this video
+
+35
+00:01:17,533 --> 00:01:19,266
+so that if you have any issues
+
+36
+00:01:19,266 --> 00:01:20,566
+or you want to take
+
+37
+00:01:20,566 --> 00:01:23,299
+what you learn from discourse and then apply it within
+
+38
+00:01:23,300 --> 00:01:25,700
+your own API you can do so
+
+39
+00:01:25,700 --> 00:01:28,133
+feel free to on the repo and
+
+40
+00:01:28,666 --> 00:01:31,599
+yeah just just use the code as you intend
+
+41
+00:01:31,733 --> 00:01:34,099
+and if you have questions regarding J liberty
+
+42
+00:01:34,266 --> 00:01:36,299
+literally just ask on the community
+
+43
+00:01:36,300 --> 00:01:37,933
+and someone within the community
+
+44
+00:01:38,066 --> 00:01:39,499
+will be able to help you
+
+45
+00:01:47,466 --> 00:01:49,899
+before we start the implementation process
+
+46
+00:01:49,900 --> 00:01:52,466
+let me 1st explain to you how this
+
+47
+00:01:52,466 --> 00:01:55,333
+JWT validation mechanism works
+
+48
+00:01:56,066 --> 00:02:00,099
+the whole story starts when a customer and a client
+
+49
+00:02:00,266 --> 00:02:02,899
+send an HDTP request to our
+
+50
+00:02:03,266 --> 00:02:04,266
+backend system
+
+51
+00:02:04,500 --> 00:02:07,533
+which is running using spring boot container
+
+52
+00:02:08,000 --> 00:02:11,200
+running on an Apache dumpkat embedded server
+
+53
+00:02:12,166 --> 00:02:14,399
+so just a reminder for you
+
+54
+00:02:15,700 --> 00:02:18,766
+the 1st thing that gets executed within
+
+55
+00:02:18,900 --> 00:02:21,533
+a spring application is the filter
+
+56
+00:02:21,666 --> 00:02:25,399
+so anytime and each time you create a filter
+
+57
+00:02:25,566 --> 00:02:27,566
+just notice and remember
+
+58
+00:02:27,566 --> 00:02:28,666
+that it will be the
+
+59
+00:02:28,666 --> 00:02:32,266
+1st thing that gets executed within our application
+
+60
+00:02:32,966 --> 00:02:34,366
+so in this case
+
+61
+00:02:34,900 --> 00:02:37,500
+the 1st thing that will be executed is our
+
+62
+00:02:37,500 --> 00:02:39,800
+JWT authentication filter
+
+63
+00:02:39,900 --> 00:02:43,100
+and this is only a one spur quest filter
+
+64
+00:02:43,200 --> 00:02:47,133
+and has the role to validate and check everything
+
+65
+00:02:47,200 --> 00:02:50,966
+regarding the token or the JWT token that we have
+
+66
+00:02:51,666 --> 00:02:54,499
+so now let's start the process
+
+67
+00:02:54,600 --> 00:02:56,466
+the 1st thing that will happen
+
+68
+00:02:56,533 --> 00:02:57,899
+we will have here
+
+69
+00:02:57,900 --> 00:02:59,400
+an internal check
+
+70
+00:02:59,400 --> 00:03:02,666
+to check if we have the JWT token or not
+
+71
+00:03:03,400 --> 00:03:06,066
+so if the token is missing
+
+72
+00:03:06,066 --> 00:03:07,333
+as we can see here
+
+73
+00:03:07,333 --> 00:03:10,666
+we will send a 403 response to the client
+
+74
+00:03:10,700 --> 00:03:13,933
+so and the reason is this missing JWT
+
+75
+00:03:14,666 --> 00:03:18,799
+right so now we have our GWT token and then
+
+76
+00:03:19,200 --> 00:03:20,933
+after that we will start the
+
+77
+00:03:20,933 --> 00:03:23,399
+process or the validation process
+
+78
+00:03:23,933 --> 00:03:27,266
+so this validation process will start in this way
+
+79
+00:03:27,366 --> 00:03:30,366
+so the filter like the internal execution
+
+80
+00:03:30,366 --> 00:03:34,799
+will 1st make a call using the user details service
+
+81
+00:03:35,000 --> 00:03:39,900
+to try to fetch the user information from the database
+
+82
+00:03:40,333 --> 00:03:43,699
+and this we will base on the user email
+
+83
+00:03:43,700 --> 00:03:45,600
+that we will set as a claim or
+
+84
+00:03:45,766 --> 00:03:47,399
+a token subject
+
+85
+00:03:47,700 --> 00:03:49,100
+that we will extract
+
+86
+00:03:49,100 --> 00:03:51,600
+within this JWT autontication filter
+
+87
+00:03:51,600 --> 00:03:53,166
+so I repeat again
+
+88
+00:03:53,700 --> 00:03:58,166
+this JWT autontication filter will check the JWT token
+
+89
+00:03:58,366 --> 00:04:00,766
+extract the username or the email
+
+90
+00:04:00,766 --> 00:04:02,099
+or we call it the subject
+
+91
+00:04:02,100 --> 00:04:04,533
+when we talk about JWT tokens
+
+92
+00:04:04,900 --> 00:04:09,500
+and it will use that email to fetch the user details
+
+93
+00:04:09,800 --> 00:04:13,266
+information from our database
+
+94
+00:04:13,266 --> 00:04:15,466
+okay so this is the 1st goal
+
+95
+00:04:15,600 --> 00:04:17,700
+then once the user
+
+96
+00:04:18,500 --> 00:04:21,666
+is fetched we have the response from our database
+
+97
+00:04:21,666 --> 00:04:23,599
+and the response can be either way
+
+98
+00:04:23,733 --> 00:04:28,199
+can be an existing user or non existing user
+
+99
+00:04:28,266 --> 00:04:31,333
+okay so once we get the response to our
+
+100
+00:04:31,333 --> 00:04:33,699
+JWT automatication filter
+
+101
+00:04:33,733 --> 00:04:36,166
+here we will make a few checks
+
+102
+00:04:36,966 --> 00:04:39,666
+which is if the user does not exist
+
+103
+00:04:39,700 --> 00:04:41,900
+we will also send 403
+
+104
+00:04:42,300 --> 00:04:44,000
+to our customer
+
+105
+00:04:44,366 --> 00:04:46,066
+in case everything is fine
+
+106
+00:04:46,066 --> 00:04:48,933
+and we get our user from the database
+
+107
+00:04:49,100 --> 00:04:52,466
+we will start then a validation process
+
+108
+00:04:52,466 --> 00:04:55,299
+so this validation process because
+
+109
+00:04:55,466 --> 00:04:59,399
+this JWT token was generated for specific user
+
+110
+00:04:59,533 --> 00:05:03,866
+so we want to validate this token based on the user
+
+111
+00:05:04,200 --> 00:05:09,666
+and here we have this validate JWT process or mechanism
+
+112
+00:05:09,900 --> 00:05:13,966
+which will try to call a JWT service
+
+113
+00:05:14,066 --> 00:05:18,266
+and this JWT service will take us parameter
+
+114
+00:05:19,800 --> 00:05:21,200
+the user itself
+
+115
+00:05:21,200 --> 00:05:23,333
+and also the token or the
+
+116
+00:05:23,333 --> 00:05:25,366
+string token or the JWT token
+
+117
+00:05:25,366 --> 00:05:26,666
+call it whatever you want
+
+118
+00:05:27,100 --> 00:05:30,200
+after the execution of this validation process
+
+119
+00:05:30,200 --> 00:05:31,666
+here we have to
+
+120
+00:05:32,400 --> 00:05:33,466
+case scenario
+
+121
+00:05:33,600 --> 00:05:37,366
+so the 1st one the token is not valid so it's not
+
+122
+00:05:37,400 --> 00:05:40,666
+so for example the token is expired or the token
+
+123
+00:05:40,766 --> 00:05:42,966
+is not for that specific user
+
+124
+00:05:42,966 --> 00:05:44,099
+so what do we do
+
+125
+00:05:44,100 --> 00:05:48,166
+we will send also a 403 back to our customer
+
+126
+00:05:48,166 --> 00:05:51,999
+so and the reason will be this unvalid JWT token
+
+127
+00:05:52,600 --> 00:05:54,100
+otherwise what will happen
+
+128
+00:05:54,600 --> 00:05:55,400
+we will
+
+129
+00:05:55,733 --> 00:05:59,566
+call or we will update the security context holder
+
+130
+00:05:59,766 --> 00:06:02,933
+and set this connected user
+
+131
+00:06:03,800 --> 00:06:06,266
+because when we fetch the user details information
+
+132
+00:06:06,266 --> 00:06:07,399
+from the database
+
+133
+00:06:07,533 --> 00:06:09,699
+we will be able to set
+
+134
+00:06:10,066 --> 00:06:12,066
+this security context holder
+
+135
+00:06:12,066 --> 00:06:13,866
+so we will tell spring
+
+136
+00:06:13,866 --> 00:06:14,799
+or we will tell
+
+137
+00:06:14,800 --> 00:06:17,733
+the set of the rest of our filter chain
+
+138
+00:06:18,000 --> 00:06:21,800
+that this user is now autonicated and we will update
+
+139
+00:06:22,166 --> 00:06:23,799
+the autontication manager
+
+140
+00:06:23,800 --> 00:06:25,366
+so every time we check if
+
+141
+00:06:25,366 --> 00:06:27,966
+this user is autonticated for this request
+
+142
+00:06:28,133 --> 00:06:30,066
+the answer will be yes
+
+143
+00:06:30,800 --> 00:06:34,366
+once the security context holder will be updated
+
+144
+00:06:34,466 --> 00:06:36,766
+it will automatically dispatch
+
+145
+00:06:37,500 --> 00:06:38,500
+the request
+
+146
+00:06:38,500 --> 00:06:41,100
+and it will be sent to the dispatch or servelet
+
+147
+00:06:41,366 --> 00:06:44,399
+and from the dispatcher serverlet it will be send
+
+148
+00:06:44,400 --> 00:06:45,800
+directly to the controller
+
+149
+00:06:45,933 --> 00:06:48,766
+we will do all the execution that we need to do
+
+150
+00:06:48,766 --> 00:06:50,533
+for example calling the service
+
+151
+00:06:50,733 --> 00:06:52,933
+going to the database and so on so forth
+
+152
+00:06:52,933 --> 00:06:54,933
+and then we will send back
+
+153
+00:06:55,533 --> 00:06:56,733
+a response
+
+154
+00:06:56,733 --> 00:07:01,466
+for example it can be a JWT and it will be an http 200
+
+155
+00:07:01,733 --> 00:07:03,499
+or whatever any
+
+156
+00:07:03,666 --> 00:07:07,466
+process that will get executed within this controller
+
+157
+00:07:07,533 --> 00:07:12,899
+so this is how JWT automatication mechanism works
+
+158
+00:07:13,066 --> 00:07:15,866
+now let me show you how to implement this
+
+159
+00:07:15,866 --> 00:07:18,266
+and how to realize these steps
+
+160
+00:07:27,533 --> 00:07:30,933
+let's 1st start by creating a new spring boot project
+
+161
+00:07:31,066 --> 00:07:31,966
+to do so
+
+162
+00:07:32,100 --> 00:07:35,000
+the recommended way and the way I also recommend
+
+163
+00:07:35,500 --> 00:07:38,133
+is going to start spring AU
+
+164
+00:07:38,133 --> 00:07:40,333
+which is the spring initializer
+
+165
+00:07:40,333 --> 00:07:42,499
+and create a new project from that
+
+166
+00:07:42,933 --> 00:07:45,999
+so 1st of all make sure you use maven
+
+167
+00:07:46,000 --> 00:07:48,266
+this is what I would be using in this
+
+168
+00:07:49,066 --> 00:07:50,333
+video antitorial
+
+169
+00:07:50,800 --> 00:07:55,066
+then we want to use the recent version of spring wood
+
+170
+00:07:55,933 --> 00:07:57,666
+which is now 301
+
+171
+00:07:58,133 --> 00:08:02,799
+okay and also here make sure you select java 17
+
+172
+00:08:02,966 --> 00:08:05,166
+because the minimum required version
+
+173
+00:08:05,200 --> 00:08:07,466
+which is compatible with spring 3
+
+174
+00:08:07,533 --> 00:08:09,099
+is java 17
+
+175
+00:08:09,900 --> 00:08:10,700
+next
+
+176
+00:08:11,266 --> 00:08:12,766
+select jar packaging
+
+177
+00:08:12,766 --> 00:08:15,933
+and now let's fill this project meta data
+
+178
+00:08:16,133 --> 00:08:19,899
+so for the group ID I will call it com dot alibu
+
+179
+00:08:19,900 --> 00:08:23,100
+and the artifact I will call it security
+
+180
+00:08:23,166 --> 00:08:25,866
+okay so I will leave the rest as it is
+
+181
+00:08:25,866 --> 00:08:28,933
+and now I will move on and add some dependencies
+
+182
+00:08:29,900 --> 00:08:32,500
+so 1st of all we need the spring web
+
+183
+00:08:32,500 --> 00:08:35,533
+because we want to expose few endpoints
+
+184
+00:08:35,733 --> 00:08:37,599
+we need also the security
+
+185
+00:08:38,700 --> 00:08:40,000
+and this is the main
+
+186
+00:08:40,800 --> 00:08:42,700
+object of this video
+
+187
+00:08:42,700 --> 00:08:45,200
+and then we will need
+
+188
+00:08:45,900 --> 00:08:47,933
+GPA or spring data
+
+189
+00:08:47,933 --> 00:08:50,166
+GPA because we need to manipulate
+
+190
+00:08:50,266 --> 00:08:52,666
+and interact with a database
+
+191
+00:08:53,000 --> 00:08:55,933
+then we need a post degree SQL
+
+192
+00:08:56,200 --> 00:08:58,933
+driver to connect to post degree SQL
+
+193
+00:08:58,933 --> 00:09:00,733
+you can also use any other
+
+194
+00:09:01,400 --> 00:09:05,100
+SQL database like my SQL or Oracle or whatever
+
+195
+00:09:06,266 --> 00:09:08,666
+finally we want to use longbook
+
+196
+00:09:09,800 --> 00:09:12,300
+to reduce the boiler plate code
+
+197
+00:09:12,400 --> 00:09:14,900
+so now we have our project ready
+
+198
+00:09:14,900 --> 00:09:20,100
+we can just go ahead click on generate and start coding
+
+199
+00:09:28,300 --> 00:09:31,200
+as I mentioned before we would be using post degree
+
+200
+00:09:31,200 --> 00:09:34,733
+s QL or as a database for this application
+
+201
+00:09:35,066 --> 00:09:39,366
+so let s 1st start by configuring our data source
+
+202
+00:09:39,466 --> 00:09:41,799
+for that I will be using
+
+203
+00:09:41,933 --> 00:09:44,899
+antilijay and they will use this database tool
+
+204
+00:09:45,000 --> 00:09:49,333
+so this one is available only with the ultimate version
+
+205
+00:09:49,600 --> 00:09:52,166
+otherwise if you don't have the ultimate version
+
+206
+00:09:52,166 --> 00:09:53,733
+just make sure you unstyle positive
+
+207
+00:09:53,733 --> 00:09:55,333
+SQL and you can use
+
+208
+00:09:55,466 --> 00:09:56,799
+the PG adamant
+
+209
+00:09:56,800 --> 00:09:58,700
+or you can use the debiver
+
+210
+00:09:58,866 --> 00:10:01,399
+tool to connect to any data source
+
+211
+00:10:01,733 --> 00:10:05,066
+okay so let's start with that
+
+212
+00:10:05,166 --> 00:10:08,799
+click on here and then we have this plus icon
+
+213
+00:10:09,533 --> 00:10:11,599
+so click on this plus icon
+
+214
+00:10:11,700 --> 00:10:13,933
+and then we want data source
+
+215
+00:10:13,966 --> 00:10:17,166
+and then filter for post degree SQL
+
+216
+00:10:17,333 --> 00:10:18,199
+click on that
+
+217
+00:10:18,866 --> 00:10:20,866
+and to be able to connect
+
+218
+00:10:20,966 --> 00:10:22,599
+so make sure here
+
+219
+00:10:22,600 --> 00:10:25,800
+if this is the 1st time you will have instead of driver
+
+220
+00:10:25,800 --> 00:10:27,133
+post degree SQL
+
+221
+00:10:27,166 --> 00:10:28,199
+you will have a link
+
+222
+00:10:28,200 --> 00:10:30,966
+or you will have a button here to download the driver
+
+223
+00:10:30,966 --> 00:10:33,066
+so just go ahead and click on it
+
+224
+00:10:33,133 --> 00:10:34,899
+and download the driver
+
+225
+00:10:35,366 --> 00:10:39,499
+next the host is local host because it's the local one
+
+226
+00:10:40,200 --> 00:10:45,933
+and the default port for post degree SQL SQL is 5432
+
+227
+00:10:46,933 --> 00:10:52,133
+then if you create when you created your possibly SQL
+
+228
+00:10:52,366 --> 00:10:56,199
+did you made or did you choose a username and password
+
+229
+00:10:56,200 --> 00:10:59,900
+if yes so just go ahead and specify them here
+
+230
+00:10:59,900 --> 00:11:00,866
+so for me
+
+231
+00:11:01,100 --> 00:11:04,933
+for the purpose of this tutorial I made it amigos code
+
+232
+00:11:05,200 --> 00:11:08,666
+and for the password it's just password
+
+233
+00:11:08,700 --> 00:11:12,500
+okay and then once you fill all this information
+
+234
+00:11:12,500 --> 00:11:14,866
+just to check if everything is working fine
+
+235
+00:11:14,866 --> 00:11:16,666
+click on this test connection
+
+236
+00:11:16,900 --> 00:11:20,200
+and make sure you get this succeeded
+
+237
+00:11:20,333 --> 00:11:23,966
+otherwise just check your configuration
+
+238
+00:11:23,966 --> 00:11:26,599
+alright so now everything is done
+
+239
+00:11:26,600 --> 00:11:28,733
+I will go ahead and click on OK
+
+240
+00:11:30,966 --> 00:11:33,999
+and the 1st thing that I will do is
+
+241
+00:11:34,000 --> 00:11:36,266
+I will create a new database
+
+242
+00:11:36,500 --> 00:11:37,066
+so
+
+243
+00:11:37,066 --> 00:11:41,166
+right click on this data source new and then database
+
+244
+00:11:43,733 --> 00:11:46,899
+so I will call it JWT security
+
+245
+00:11:49,866 --> 00:11:51,266
+and then hit okay
+
+246
+00:11:53,000 --> 00:11:55,733
+so the 1st time it will not be automatically shown
+
+247
+00:11:55,733 --> 00:11:58,533
+so just click here on this 2 of
+
+248
+00:11:59,266 --> 00:12:03,133
+8 the numbers may change from one laptop to another
+
+249
+00:12:03,266 --> 00:12:06,533
+and here I want this JWT security
+
+250
+00:12:06,600 --> 00:12:08,766
+okay so uh
+
+251
+00:12:08,800 --> 00:12:09,866
+open it in here
+
+252
+00:12:09,866 --> 00:12:13,366
+and here we can see that we have 0 of 3 schemas
+
+253
+00:12:13,766 --> 00:12:15,599
+just select the public one
+
+254
+00:12:15,600 --> 00:12:17,100
+because this is the one we need
+
+255
+00:12:17,400 --> 00:12:20,333
+and this is where we will find all our tables
+
+256
+00:12:20,333 --> 00:12:21,533
+once we create them
+
+257
+00:12:21,700 --> 00:12:25,166
+so now we have our data source available
+
+258
+00:12:25,200 --> 00:12:27,366
+let's move on to the next step
+
+259
+00:12:36,866 --> 00:12:37,799
+now let's
+
+260
+00:12:37,800 --> 00:12:40,933
+establish a connection between our application
+
+261
+00:12:40,933 --> 00:12:42,133
+and the database
+
+262
+00:12:42,133 --> 00:12:43,299
+we just created
+
+263
+00:12:43,533 --> 00:12:45,333
+so the 1st thing to do is
+
+264
+00:12:45,333 --> 00:12:47,999
+go here to these application properties
+
+265
+00:12:48,200 --> 00:12:52,766
+and rename it and use the representation yamal
+
+266
+00:12:53,000 --> 00:12:54,900
+okay so this is what I prefer personally
+
+267
+00:12:54,900 --> 00:12:57,266
+and you can keep properties if you want to
+
+268
+00:12:57,600 --> 00:13:00,133
+but to better follow this tutorial
+
+269
+00:13:00,133 --> 00:13:02,533
+it's better to transform a 2 yamal
+
+270
+00:13:02,900 --> 00:13:05,733
+so in order to connect to a database
+
+271
+00:13:05,733 --> 00:13:08,966
+we need to provide a bunch of properties right here
+
+272
+00:13:08,966 --> 00:13:10,966
+so we will start with spring
+
+273
+00:13:12,133 --> 00:13:13,766
+and then data source
+
+274
+00:13:15,066 --> 00:13:16,933
+and one
+
+275
+00:13:18,000 --> 00:13:21,200
+of the things that we need to provide at 1st is the URL
+
+276
+00:13:21,500 --> 00:13:23,400
+and this one is a URL
+
+277
+00:13:23,400 --> 00:13:26,333
+or the connection string to our database
+
+278
+00:13:26,500 --> 00:13:30,566
+if you don't know it just go here to this database
+
+279
+00:13:30,866 --> 00:13:32,999
+click on it right click on
+
+280
+00:13:33,300 --> 00:13:35,500
+the the connection you just created
+
+281
+00:13:35,800 --> 00:13:38,733
+properties and you copy this one
+
+282
+00:13:39,266 --> 00:13:40,699
+you copy this part right here
+
+283
+00:13:40,700 --> 00:13:43,000
+it's G d B C column post degree as create
+
+284
+00:13:43,166 --> 00:13:47,099
+and then the address port slash the database
+
+285
+00:13:47,100 --> 00:13:48,466
+so let me close this
+
+286
+00:13:51,500 --> 00:13:53,000
+I will base this one
+
+287
+00:13:53,000 --> 00:13:54,900
+and make sure here you
+
+288
+00:13:55,000 --> 00:13:57,200
+will write the correct database name
+
+289
+00:13:57,200 --> 00:14:00,166
+so for us we call the JWT security
+
+290
+00:14:00,900 --> 00:14:04,400
+now we need to provide the username and password
+
+291
+00:14:04,733 --> 00:14:07,299
+okay so for my case it's empty
+
+292
+00:14:07,300 --> 00:14:09,400
+make sure you provide the correct one
+
+293
+00:14:10,500 --> 00:14:12,200
+and here's password
+
+294
+00:14:14,700 --> 00:14:16,800
+so next property is
+
+295
+00:14:17,366 --> 00:14:18,333
+after providing
+
+296
+00:14:18,566 --> 00:14:22,099
+the data source information we want now to give some
+
+297
+00:14:22,133 --> 00:14:24,099
+other GPA properties
+
+298
+00:14:24,100 --> 00:14:28,066
+okay so here it will be GPA and then hibernate
+
+299
+00:14:29,500 --> 00:14:33,266
+and here I want to tell spring what to do
+
+300
+00:14:33,533 --> 00:14:36,666
+at the startup or up that application startup
+
+301
+00:14:37,000 --> 00:14:39,600
+and this property is the video auto
+
+302
+00:14:39,700 --> 00:14:41,966
+and here we have a bunch of
+
+303
+00:14:43,066 --> 00:14:46,466
+options so we have great drop create non update
+
+304
+00:14:46,533 --> 00:14:47,599
+and varied date
+
+305
+00:14:47,933 --> 00:14:49,866
+so I will be using the 1st one
+
+306
+00:14:49,866 --> 00:14:52,333
+because every time I want to start the application
+
+307
+00:14:52,400 --> 00:14:56,266
+I want to create a new database a news keyman
+
+308
+00:14:56,666 --> 00:14:59,699
+and when I stop the application I want to destroy it
+
+309
+00:14:59,700 --> 00:15:04,266
+okay so I always want to start with empty database
+
+310
+00:15:05,500 --> 00:15:07,800
+alright so the next one
+
+311
+00:15:08,333 --> 00:15:10,466
+within JPA within JPA
+
+312
+00:15:10,966 --> 00:15:12,966
+like you see now you need to
+
+313
+00:15:13,000 --> 00:15:16,366
+really pay attention about the antentation right here
+
+314
+00:15:16,600 --> 00:15:17,566
+because this one
+
+315
+00:15:17,566 --> 00:15:19,933
+the studio auto is part of the hibernate
+
+316
+00:15:20,166 --> 00:15:23,599
+and the one I will write right now is part of JPA
+
+317
+00:15:23,600 --> 00:15:25,933
+so it's spring JPA
+
+318
+00:15:26,166 --> 00:15:28,199
+and then show SQL
+
+319
+00:15:28,200 --> 00:15:30,066
+I want to show SQL
+
+320
+00:15:31,666 --> 00:15:33,366
+when when we perform or when
+
+321
+00:15:33,566 --> 00:15:36,066
+spring date and JPA performs um
+
+322
+00:15:36,533 --> 00:15:38,533
+equally I want to see that way
+
+323
+00:15:38,533 --> 00:15:39,333
+okay
+
+324
+00:15:40,100 --> 00:15:43,266
+I want also to add some other properties
+
+325
+00:15:43,366 --> 00:15:45,899
+so here I will add properties
+
+326
+00:15:46,100 --> 00:15:47,900
+and one of these properties
+
+327
+00:15:48,066 --> 00:15:50,533
+and here I have hibernate
+
+328
+00:15:53,400 --> 00:15:57,133
+and within this hibernate I want also to format the SQL
+
+329
+00:15:58,966 --> 00:16:00,699
+so format sq and through
+
+330
+00:16:01,100 --> 00:16:03,766
+I want my queries to be formatted
+
+331
+00:16:03,966 --> 00:16:07,199
+now go back to the same level as properties
+
+332
+00:16:07,200 --> 00:16:10,400
+and provide some information about the database
+
+333
+00:16:10,566 --> 00:16:14,066
+so here we want to tell GPA which database we are using
+
+334
+00:16:14,066 --> 00:16:16,933
+and for this case we are using post degree SQL
+
+335
+00:16:17,500 --> 00:16:18,600
+and then
+
+336
+00:16:18,600 --> 00:16:20,000
+we can also provide
+
+337
+00:16:20,000 --> 00:16:23,000
+the database platform that we are using
+
+338
+00:16:23,166 --> 00:16:27,399
+and this will help spring performing and writing the
+
+339
+00:16:27,566 --> 00:16:31,766
+better aquaries to to suit our postgrave and database
+
+340
+00:16:31,800 --> 00:16:35,000
+so for this one it's org hibernate
+
+341
+00:16:37,333 --> 00:16:38,766
+dot DIOLICT
+
+342
+00:16:39,933 --> 00:16:43,799
+dot post green esque and dialect
+
+343
+00:16:45,733 --> 00:16:46,266
+alright
+
+344
+00:16:46,266 --> 00:16:49,299
+and here we just forgot one property right here
+
+345
+00:16:49,300 --> 00:16:51,300
+which is the driver class name
+
+346
+00:16:51,400 --> 00:16:53,100
+so this will help
+
+347
+00:16:53,900 --> 00:16:57,866
+a spring to detect or use the best driver class name
+
+348
+00:16:58,200 --> 00:17:00,600
+and here we are using post degree SQL
+
+349
+00:17:00,600 --> 00:17:03,100
+so until a J will automatically propose it to you
+
+350
+00:17:03,100 --> 00:17:06,566
+otherwise it's the org post degree SQL driver
+
+351
+00:17:06,666 --> 00:17:08,966
+and this is the one that we got
+
+352
+00:17:09,200 --> 00:17:11,533
+from the post degree SQL driver
+
+353
+00:17:12,400 --> 00:17:13,333
+dependency
+
+354
+00:17:13,666 --> 00:17:16,699
+alright so that's it about this configuration
+
+355
+00:17:16,700 --> 00:17:19,866
+let's move on and start implementing our security
+
+356
+00:17:27,400 --> 00:17:31,100
+when we talk about authorization and authentication
+
+357
+00:17:31,133 --> 00:17:33,466
+we mainly talk about users
+
+358
+00:17:33,666 --> 00:17:37,933
+so let's go ahead and create our user class
+
+359
+00:17:38,100 --> 00:17:39,700
+so within the java package
+
+360
+00:17:39,700 --> 00:17:42,133
+and within the main package that we have right here
+
+361
+00:17:42,133 --> 00:17:43,933
+right click and
+
+362
+00:17:45,000 --> 00:17:47,500
+new class and here we can
+
+363
+00:17:47,533 --> 00:17:50,099
+create a package on a class at the same time
+
+364
+00:17:50,100 --> 00:17:52,166
+so the package I will call it user
+
+365
+00:17:52,333 --> 00:17:55,199
+and here I will just call the class user
+
+366
+00:17:55,200 --> 00:17:57,933
+so user to user will create a package user
+
+367
+00:17:57,933 --> 00:17:59,066
+and inside of it
+
+368
+00:17:59,366 --> 00:18:01,666
+it will create a class user
+
+369
+00:18:01,933 --> 00:18:04,566
+alright so this is our user class
+
+370
+00:18:04,566 --> 00:18:06,766
+let me make this one full screen
+
+371
+00:18:07,066 --> 00:18:10,599
+and now I want to write a bunch of properties within
+
+372
+00:18:10,666 --> 00:18:11,899
+this class okay
+
+373
+00:18:12,066 --> 00:18:13,933
+so my user has
+
+374
+00:18:14,366 --> 00:18:17,733
+the following characteristics or the following fields
+
+375
+00:18:17,733 --> 00:18:21,299
+so 1st of all I want to have an antiger ID
+
+376
+00:18:22,333 --> 00:18:25,466
+and then I want to have
+
+377
+00:18:26,366 --> 00:18:27,999
+a string 1st name
+
+378
+00:18:30,133 --> 00:18:33,266
+one private string last name
+
+379
+00:18:34,266 --> 00:18:37,533
+and also of course we need an email and password
+
+380
+00:18:37,533 --> 00:18:39,299
+for this user to be able
+
+381
+00:18:39,300 --> 00:18:42,600
+to authenticate and connect to our application
+
+382
+00:18:42,800 --> 00:18:44,800
+so here I will add email
+
+383
+00:18:45,700 --> 00:18:49,366
+and also private strength password
+
+384
+00:18:51,466 --> 00:18:54,699
+so these are the information about
+
+385
+00:18:55,400 --> 00:18:58,866
+our user now I will add a bunch of
+
+386
+00:18:59,133 --> 00:19:00,699
+lung book annotations
+
+387
+00:19:00,733 --> 00:19:02,599
+in order to reduce the boiler plate
+
+388
+00:19:02,600 --> 00:19:04,300
+because you know when we create
+
+389
+00:19:05,066 --> 00:19:07,066
+in class we need getters and setters
+
+390
+00:19:07,066 --> 00:19:08,599
+we need constructors
+
+391
+00:19:08,600 --> 00:19:09,533
+we need also
+
+392
+00:19:10,366 --> 00:19:12,066
+the design partner builder
+
+393
+00:19:12,533 --> 00:19:14,666
+to be able to easily build our object
+
+394
+00:19:15,266 --> 00:19:17,799
+and so forth so let's start with that
+
+395
+00:19:17,800 --> 00:19:19,766
+so we will need the date
+
+396
+00:19:20,500 --> 00:19:24,566
+annotation and this annotation will provide us with
+
+397
+00:19:24,800 --> 00:19:29,266
+is the equivalent of getter setter as you can see here
+
+398
+00:19:29,266 --> 00:19:30,933
+so it generates getters
+
+399
+00:19:31,166 --> 00:19:31,933
+for all fields
+
+400
+00:19:31,933 --> 00:19:34,966
+for useful methods to string and so on so forth
+
+401
+00:19:34,966 --> 00:19:38,199
+so it's the equivalent to the getter setter required
+
+402
+00:19:38,200 --> 00:19:41,566
+arts constructor to string and equals and hash coat
+
+403
+00:19:41,566 --> 00:19:42,366
+okay
+
+404
+00:19:43,266 --> 00:19:46,999
+also I want to use the builder annotation
+
+405
+00:19:47,500 --> 00:19:50,166
+so this builder annotation will help me
+
+406
+00:19:50,966 --> 00:19:52,733
+build my object
+
+407
+00:19:52,766 --> 00:19:55,699
+in an easy way using the design pattern builder
+
+408
+00:19:55,733 --> 00:19:59,333
+okay and also I will need the no arx constructor
+
+409
+00:19:59,333 --> 00:20:02,366
+and of course when we talk about design pattern builder
+
+410
+00:20:02,466 --> 00:20:03,299
+we need
+
+411
+00:20:03,333 --> 00:20:06,466
+always the all construct the or arx constructor
+
+412
+00:20:06,566 --> 00:20:09,099
+okay so let's add this one
+
+413
+00:20:10,166 --> 00:20:11,866
+and like this we
+
+414
+00:20:13,300 --> 00:20:15,166
+have our user class
+
+415
+00:20:15,333 --> 00:20:19,366
+now let's make this user class an entity
+
+416
+00:20:27,400 --> 00:20:30,666
+to make this user class and NTT
+
+417
+00:20:31,000 --> 00:20:35,533
+so the 1st thing we need to add is this NTT annotation
+
+418
+00:20:35,733 --> 00:20:39,733
+and since we are using the springwood 3.0 here
+
+419
+00:20:39,733 --> 00:20:42,099
+make sure that the package is
+
+420
+00:20:42,100 --> 00:20:45,333
+Jakarta dot persistence and it's no longer java eggs
+
+421
+00:20:45,366 --> 00:20:48,899
+persistence so this also will help you tell
+
+422
+00:20:49,133 --> 00:20:52,099
+if you are using the correct version of spring boot
+
+423
+00:20:52,100 --> 00:20:55,333
+okay so here we need the entity annotation
+
+424
+00:20:55,366 --> 00:20:57,966
+and because this username
+
+425
+00:20:58,066 --> 00:20:58,599
+this
+
+426
+00:20:58,600 --> 00:21:02,733
+user class is already reserved for postigrae esquell
+
+427
+00:21:02,733 --> 00:21:04,899
+because postegrae escale already has
+
+428
+00:21:05,133 --> 00:21:06,666
+a table called user
+
+429
+00:21:06,666 --> 00:21:10,199
+so we cannot create a 2nd table called user
+
+430
+00:21:10,366 --> 00:21:13,733
+I will use the table annotation right here
+
+431
+00:21:13,966 --> 00:21:15,766
+because you know the table annotation
+
+432
+00:21:15,766 --> 00:21:17,666
+if I do not provide
+
+433
+00:21:18,800 --> 00:21:20,733
+if I don't provide any
+
+434
+00:21:21,100 --> 00:21:22,166
+name right here
+
+435
+00:21:22,166 --> 00:21:23,166
+it will take
+
+436
+00:21:23,166 --> 00:21:26,533
+the entity or the class name as a default name for
+
+437
+00:21:26,533 --> 00:21:27,566
+the table okay
+
+438
+00:21:27,766 --> 00:21:30,466
+but here I want just to call it androscour user
+
+439
+00:21:30,466 --> 00:21:31,799
+to avoid this
+
+440
+00:21:32,166 --> 00:21:35,933
+ambiguity between this user class and the one with
+
+441
+00:21:36,866 --> 00:21:38,499
+and the one with post degree sq
+
+442
+00:21:39,666 --> 00:21:41,766
+so now this is
+
+443
+00:21:41,766 --> 00:21:44,399
+kind of sufficient to tell that this user
+
+444
+00:21:44,400 --> 00:21:46,133
+class now is an entity
+
+445
+00:21:46,133 --> 00:21:47,799
+but we still need to provide
+
+446
+00:21:48,066 --> 00:21:49,733
+one small information
+
+447
+00:21:49,733 --> 00:21:53,133
+okay so here we have this
+
+448
+00:21:53,733 --> 00:21:54,466
+error right here
+
+449
+00:21:54,466 --> 00:21:56,099
+we see that this persistence
+
+450
+00:21:56,100 --> 00:21:58,500
+entity user should have a primary key
+
+451
+00:21:58,500 --> 00:22:02,300
+okay so we need to add an at an ID attribute
+
+452
+00:22:02,300 --> 00:22:04,200
+which we already have right here
+
+453
+00:22:04,200 --> 00:22:07,700
+but we still missing this ID annotation
+
+454
+00:22:07,900 --> 00:22:09,566
+so this ID annotation is
+
+455
+00:22:09,666 --> 00:22:11,933
+coming from the jackart adult persistence
+
+456
+00:22:12,066 --> 00:22:16,599
+and it's telling that this ID is
+
+457
+00:22:16,733 --> 00:22:20,133
+the unique identifier of this user class
+
+458
+00:22:20,533 --> 00:22:23,699
+now I want also this ID to be
+
+459
+00:22:23,800 --> 00:22:26,366
+auto incremented or auto generated
+
+460
+00:22:26,366 --> 00:22:28,299
+so every time I want to create user
+
+461
+00:22:28,300 --> 00:22:30,533
+I don't need to provide this ID
+
+462
+00:22:30,566 --> 00:22:32,699
+and every time this ID is now
+
+463
+00:22:33,400 --> 00:22:37,566
+I wanted to be auto incremented by the system or by
+
+464
+00:22:37,700 --> 00:22:39,600
+spring data JPA itself
+
+465
+00:22:39,600 --> 00:22:42,566
+so to do so and to make it in an easy way
+
+466
+00:22:42,666 --> 00:22:45,599
+I will use a notation generated value
+
+467
+00:22:45,666 --> 00:22:48,566
+okay so this generated value
+
+468
+00:22:48,933 --> 00:22:53,899
+it will make this ID or this object auto generated
+
+469
+00:22:54,000 --> 00:22:57,333
+using whether a sequence a table and so on so forth
+
+470
+00:22:57,400 --> 00:22:59,566
+and we call this is strategy
+
+471
+00:23:00,966 --> 00:23:02,799
+so for this strategy
+
+472
+00:23:04,133 --> 00:23:05,466
+we have several options
+
+473
+00:23:05,466 --> 00:23:08,466
+OK we have auto identity sequence stable and
+
+474
+00:23:08,800 --> 00:23:10,533
+UYID
+
+475
+00:23:10,866 --> 00:23:11,666
+so
+
+476
+00:23:11,900 --> 00:23:13,866
+the auto is the default value
+
+477
+00:23:13,933 --> 00:23:16,166
+identity means that it will use
+
+478
+00:23:16,600 --> 00:23:19,600
+an identity number like an auto ancrement
+
+479
+00:23:19,766 --> 00:23:22,733
+sequence means that we will create a sequence
+
+480
+00:23:22,733 --> 00:23:24,299
+within our database
+
+481
+00:23:24,333 --> 00:23:26,366
+and use this sequence to
+
+482
+00:23:26,966 --> 00:23:30,166
+increment each time the value of the ID
+
+483
+00:23:30,466 --> 00:23:33,499
+the table this means that we will create a table
+
+484
+00:23:34,200 --> 00:23:36,166
+in the database and we will call it
+
+485
+00:23:36,266 --> 00:23:38,399
+by default it's called hibernate sequence
+
+486
+00:23:38,800 --> 00:23:43,700
+and this table will always be requested and queried by
+
+487
+00:23:44,200 --> 00:23:45,400
+spring data JPA
+
+488
+00:23:45,400 --> 00:23:48,200
+to get the last value and incremented for the last one
+
+489
+00:23:48,500 --> 00:23:53,166
+the UU ID is using this one I think you know it from
+
+490
+00:23:53,900 --> 00:23:55,800
+from the java java utils
+
+491
+00:23:57,300 --> 00:23:59,866
+but if you leave it to Otto
+
+492
+00:23:59,866 --> 00:24:02,099
+if you leave the generation type to Otto
+
+493
+00:24:02,400 --> 00:24:03,366
+hibernate
+
+494
+00:24:03,566 --> 00:24:07,999
+will try to detect the best suitable option for you
+
+495
+00:24:08,000 --> 00:24:11,500
+for example if we are using post degree s crel it will
+
+496
+00:24:12,000 --> 00:24:13,166
+by default sequence
+
+497
+00:24:13,600 --> 00:24:16,400
+if you are using my SQL for example
+
+498
+00:24:16,566 --> 00:24:18,133
+it will pick table
+
+499
+00:24:18,133 --> 00:24:20,533
+because my SQL does not work with sequences
+
+500
+00:24:20,566 --> 00:24:22,899
+so it will pick table for that
+
+501
+00:24:22,900 --> 00:24:25,766
+so for the moment I will just keep it empty
+
+502
+00:24:26,133 --> 00:24:26,766
+like this
+
+503
+00:24:26,766 --> 00:24:29,399
+because as I mentioned the default value is auto
+
+504
+00:24:29,500 --> 00:24:32,300
+so it will be automatically detected
+
+505
+00:24:32,300 --> 00:24:35,266
+okay so now we have our entity
+
+506
+00:24:35,300 --> 00:24:37,500
+let's try to start the application
+
+507
+00:24:37,500 --> 00:24:40,000
+and make sure that we have our table created
+
+508
+00:24:40,000 --> 00:24:41,133
+within the database
+
+509
+00:24:46,066 --> 00:24:49,399
+here enable the annotation processing for longbox
+
+510
+00:24:51,266 --> 00:24:53,166
+and now we have our
+
+511
+00:24:54,300 --> 00:24:55,566
+application started
+
+512
+00:24:55,566 --> 00:24:58,133
+let's have a look quickly on the logs
+
+513
+00:24:58,266 --> 00:25:00,699
+and here we see that create sequence
+
+514
+00:25:00,900 --> 00:25:03,900
+user sequence start with one increment by 50
+
+515
+00:25:03,900 --> 00:25:06,333
+this is automatically generated as I mentioned
+
+516
+00:25:06,466 --> 00:25:10,599
+and here we see the SQL that we have create table user
+
+517
+00:25:10,700 --> 00:25:13,133
+with an ID email and so on so forth
+
+518
+00:25:13,133 --> 00:25:15,499
+okay and here we have
+
+519
+00:25:15,500 --> 00:25:19,066
+spring security is auto generating a security password
+
+520
+00:25:19,133 --> 00:25:21,466
+and this one we will see later on
+
+521
+00:25:21,566 --> 00:25:24,066
+okay so also if you want to check
+
+522
+00:25:24,066 --> 00:25:26,333
+you can open your database right here
+
+523
+00:25:26,333 --> 00:25:28,266
+click on this one refresh it
+
+524
+00:25:28,866 --> 00:25:30,566
+and within the public schema
+
+525
+00:25:30,566 --> 00:25:33,699
+we see that we have this user table right here
+
+526
+00:25:33,700 --> 00:25:35,066
+and if we open it
+
+527
+00:25:36,166 --> 00:25:38,666
+we will see the ID or the attributes
+
+528
+00:25:38,666 --> 00:25:41,133
+attributes that we already provided
+
+529
+00:25:53,800 --> 00:25:58,800
+when spring security starts and set up the application
+
+530
+00:25:59,066 --> 00:26:02,866
+it will use an object called user details
+
+531
+00:26:02,866 --> 00:26:05,266
+and this user details is an interface
+
+532
+00:26:05,733 --> 00:26:08,799
+that contains a bunch of methods okay
+
+533
+00:26:09,166 --> 00:26:13,066
+and each time you want to work with spring security
+
+534
+00:26:13,066 --> 00:26:14,333
+you need to ensure
+
+535
+00:26:14,333 --> 00:26:17,566
+that you are providing these user details object
+
+536
+00:26:17,766 --> 00:26:18,999
+in order to make
+
+537
+00:26:19,666 --> 00:26:22,066
+spring security life easy to use
+
+538
+00:26:22,066 --> 00:26:22,699
+okay
+
+539
+00:26:22,700 --> 00:26:27,566
+so to do this for us for our user I recommend this way
+
+540
+00:26:27,866 --> 00:26:30,466
+so every time you have user think
+
+541
+00:26:30,866 --> 00:26:31,999
+always to make it
+
+542
+00:26:32,066 --> 00:26:34,999
+or to implement the user details interface
+
+543
+00:26:35,166 --> 00:26:38,366
+so like that your user or your application user
+
+544
+00:26:38,400 --> 00:26:42,000
+is already a spring user if we may say so
+
+545
+00:26:42,000 --> 00:26:43,966
+okay so to do that
+
+546
+00:26:44,200 --> 00:26:45,300
+just go ahead
+
+547
+00:26:45,800 --> 00:26:48,100
+to this user class that we created
+
+548
+00:26:48,300 --> 00:26:52,200
+and implement an interface called user details
+
+549
+00:26:52,533 --> 00:26:55,666
+okay and this user details is from the package or
+
+550
+00:26:55,800 --> 00:26:58,766
+spring framework security core user details
+
+551
+00:26:58,766 --> 00:27:00,966
+okay click here
+
+552
+00:27:00,966 --> 00:27:05,533
+and now it will ask us to implement a bench of method
+
+553
+00:27:05,566 --> 00:27:07,866
+so click on this one implement method
+
+554
+00:27:08,066 --> 00:27:09,733
+and we see right here
+
+555
+00:27:09,733 --> 00:27:12,533
+that these are the methods that we want
+
+556
+00:27:12,533 --> 00:27:13,966
+or that we need to
+
+557
+00:27:14,066 --> 00:27:15,199
+auto generate
+
+558
+00:27:15,200 --> 00:27:16,000
+okay
+
+559
+00:27:16,733 --> 00:27:19,366
+not autogenerate but we need to implement
+
+560
+00:27:19,666 --> 00:27:21,699
+so let's get authorities username
+
+561
+00:27:21,700 --> 00:27:23,500
+and we have this bullion
+
+562
+00:27:24,600 --> 00:27:28,266
+methods account expired locked and so and so forth
+
+563
+00:27:28,333 --> 00:27:31,466
+okay so just go ahead click OK
+
+564
+00:27:31,500 --> 00:27:34,266
+and we will see how to override
+
+565
+00:27:34,333 --> 00:27:37,766
+but before that I want to go a bit
+
+566
+00:27:38,266 --> 00:27:42,266
+more into details about these user details interface
+
+567
+00:27:42,400 --> 00:27:45,533
+so I will open the definition download the source
+
+568
+00:27:45,733 --> 00:27:47,966
+so we can easily see it
+
+569
+00:27:48,533 --> 00:27:49,399
+so here
+
+570
+00:27:49,400 --> 00:27:51,500
+if I click on this icon right here
+
+571
+00:27:51,500 --> 00:27:53,800
+to see all the implementation of
+
+572
+00:27:53,800 --> 00:27:54,933
+this interface
+
+573
+00:27:55,066 --> 00:27:56,766
+we have this mutable user
+
+574
+00:27:56,766 --> 00:27:59,199
+mutable user details and so and so forth
+
+575
+00:27:59,200 --> 00:28:03,366
+and also we have our user class the one that we created
+
+576
+00:28:03,766 --> 00:28:06,899
+and we can see also that we have this user
+
+577
+00:28:06,933 --> 00:28:10,199
+from spring framework security core user detailed
+
+578
+00:28:10,300 --> 00:28:12,000
+and let's have a look on this one
+
+579
+00:28:12,300 --> 00:28:13,466
+okay so
+
+580
+00:28:13,800 --> 00:28:16,300
+this user detail contains the username
+
+581
+00:28:16,300 --> 00:28:19,733
+password authorities and the bench of bullions
+
+582
+00:28:20,266 --> 00:28:21,533
+the account expired
+
+583
+00:28:21,533 --> 00:28:23,933
+locked non expired and enabled or not
+
+584
+00:28:24,133 --> 00:28:26,366
+and this information on this
+
+585
+00:28:27,766 --> 00:28:30,599
+this attribute spring will use automatically
+
+586
+00:28:34,100 --> 00:28:38,066
+to play with authorization and authentication
+
+587
+00:28:38,066 --> 00:28:39,133
+and for example
+
+588
+00:28:39,366 --> 00:28:43,466
+if we we can't really rely on this account non expired
+
+589
+00:28:43,733 --> 00:28:47,399
+where if we want to have some expiring
+
+590
+00:28:47,733 --> 00:28:50,099
+dates or use the user can expire
+
+591
+00:28:50,100 --> 00:28:52,666
+and also if we want to lock and unlock the user
+
+592
+00:28:53,300 --> 00:28:56,300
+or the same if we want to work with credentials
+
+593
+00:28:56,300 --> 00:28:57,533
+and so and so forth
+
+594
+00:28:57,533 --> 00:29:01,366
+okay so I will give you the time to play and check this
+
+595
+00:29:01,466 --> 00:29:03,766
+and here we see that we have a bunch of constructor
+
+596
+00:29:03,766 --> 00:29:05,966
+and we have these methods
+
+597
+00:29:06,066 --> 00:29:08,799
+that they need to be overridden right here
+
+598
+00:29:08,800 --> 00:29:09,600
+okay
+
+599
+00:29:10,333 --> 00:29:12,933
+so here we see that these user
+
+600
+00:29:12,966 --> 00:29:14,799
+already implements user details
+
+601
+00:29:14,933 --> 00:29:17,166
+so for you you have 2 options
+
+602
+00:29:17,300 --> 00:29:18,100
+whether
+
+603
+00:29:18,900 --> 00:29:22,900
+you implement this user details interface within
+
+604
+00:29:23,166 --> 00:29:24,366
+your user class
+
+605
+00:29:24,400 --> 00:29:26,533
+or you can create for example a user
+
+606
+00:29:26,533 --> 00:29:29,733
+you call it up user and then extend user
+
+607
+00:29:29,933 --> 00:29:32,666
+the one from springboot so it will be the same
+
+608
+00:29:32,666 --> 00:29:33,333
+but
+
+609
+00:29:33,333 --> 00:29:37,099
+for me I want always to have control over my object
+
+610
+00:29:37,100 --> 00:29:39,733
+so I create my own user class and
+
+611
+00:29:39,900 --> 00:29:41,600
+implement user details
+
+612
+00:29:41,600 --> 00:29:46,066
+so now let's go ahead and implement these methods
+
+613
+00:29:46,066 --> 00:29:49,399
+okay so here the 1st one is
+
+614
+00:29:49,733 --> 00:29:53,699
+we need to provide a collection of granted authorities
+
+615
+00:29:54,300 --> 00:29:57,600
+and already the method is called get authorities
+
+616
+00:29:57,600 --> 00:29:59,400
+so this get authorities
+
+617
+00:29:59,533 --> 00:30:03,966
+will return or should return a list of roles
+
+618
+00:30:04,333 --> 00:30:07,599
+like let me explain like that when we talk about roles
+
+619
+00:30:07,666 --> 00:30:09,933
+so here we need to add
+
+620
+00:30:10,866 --> 00:30:15,999
+role okay so I will do or I will create a role
+
+621
+00:30:17,066 --> 00:30:18,366
+and this one it will
+
+622
+00:30:18,366 --> 00:30:21,966
+I will create an in amp for it and I will call it roll
+
+623
+00:30:22,400 --> 00:30:25,333
+and this let's create this class
+
+624
+00:30:26,300 --> 00:30:29,966
+and here you can choose the option create an arm role
+
+625
+00:30:30,100 --> 00:30:33,166
+hit OK and we want to create it within the same package
+
+626
+00:30:33,533 --> 00:30:34,933
+and within this role
+
+627
+00:30:34,933 --> 00:30:37,466
+it's so easy I will just user
+
+628
+00:30:38,400 --> 00:30:40,400
+and admin okay so
+
+629
+00:30:40,533 --> 00:30:43,866
+we want to have only 2 roles within our application
+
+630
+00:30:43,933 --> 00:30:46,966
+so now we have this role and because it's an enam
+
+631
+00:30:46,966 --> 00:30:51,133
+we need to add this enumerated annotation
+
+632
+00:30:51,200 --> 00:30:53,533
+and this enimmerated annotation is to tell
+
+633
+00:30:53,533 --> 00:30:55,166
+spring that this is an enam
+
+634
+00:30:55,166 --> 00:30:59,366
+and we want to use it whether the enam type
+
+635
+00:31:00,966 --> 00:31:02,666
+ordinal or string
+
+636
+00:31:02,666 --> 00:31:03,899
+so by the way
+
+637
+00:31:04,100 --> 00:31:08,733
+by default its ordinal means it's 012
+
+638
+00:31:08,966 --> 00:31:10,133
+and so on so forth
+
+639
+00:31:10,166 --> 00:31:12,699
+string it will take the string value
+
+640
+00:31:13,200 --> 00:31:14,933
+of the inner okay
+
+641
+00:31:15,566 --> 00:31:17,399
+so let's go back to this again
+
+642
+00:31:17,400 --> 00:31:19,266
+authorities so in here
+
+643
+00:31:19,700 --> 00:31:20,500
+because
+
+644
+00:31:21,333 --> 00:31:22,466
+with our design
+
+645
+00:31:22,500 --> 00:31:27,066
+we said or we decided that user can have only one role
+
+646
+00:31:27,100 --> 00:31:29,500
+so I will just return a list
+
+647
+00:31:30,966 --> 00:31:31,799
+dot off
+
+648
+00:31:32,800 --> 00:31:36,933
+and here I want to return a new simple
+
+649
+00:31:37,333 --> 00:31:38,699
+granted authority
+
+650
+00:31:39,300 --> 00:31:41,900
+okay so the object that I want to return is called
+
+651
+00:31:42,000 --> 00:31:43,800
+simple granted authority
+
+652
+00:31:43,933 --> 00:31:46,166
+and here I want to return the role
+
+653
+00:31:46,933 --> 00:31:47,566
+name
+
+654
+00:31:47,566 --> 00:31:50,599
+okay so the role is refrancing this role right here
+
+655
+00:31:51,666 --> 00:31:57,066
+next one is this get user name so the user name for us
+
+656
+00:31:57,966 --> 00:32:00,733
+is our username so it's the email
+
+657
+00:32:00,766 --> 00:32:01,566
+okay
+
+658
+00:32:02,366 --> 00:32:06,266
+then we have this account not expired
+
+659
+00:32:07,466 --> 00:32:11,199
+so here we have this is account non expired here
+
+660
+00:32:11,200 --> 00:32:15,300
+make sure and be careful it's non expired false
+
+661
+00:32:15,300 --> 00:32:16,666
+this is the negation
+
+662
+00:32:16,666 --> 00:32:19,133
+so non expired should be true
+
+663
+00:32:19,133 --> 00:32:22,866
+otherwise we will not be able to connect our users
+
+664
+00:32:23,066 --> 00:32:25,799
+so non expired non locked and
+
+665
+00:32:26,166 --> 00:32:28,166
+non credential on expired
+
+666
+00:32:28,300 --> 00:32:31,100
+and if the user is enabled fault
+
+667
+00:32:31,100 --> 00:32:33,500
+and here I want to make it true here
+
+668
+00:32:33,500 --> 00:32:37,000
+there is one thing that I need to mention right here
+
+669
+00:32:37,066 --> 00:32:37,966
+so within
+
+670
+00:32:38,200 --> 00:32:41,600
+this method let's go back to this user details
+
+671
+00:32:41,933 --> 00:32:45,133
+interface we see that we have this get password
+
+672
+00:32:45,133 --> 00:32:47,266
+okay but this cat password
+
+673
+00:32:48,500 --> 00:32:50,166
+was not overridden right here
+
+674
+00:32:50,166 --> 00:32:53,099
+because we have this string
+
+675
+00:32:53,700 --> 00:32:55,266
+password right here
+
+676
+00:32:55,900 --> 00:32:58,700
+and we have the longbook annotation
+
+677
+00:32:58,700 --> 00:33:02,100
+so we have already the method called get password
+
+678
+00:33:02,133 --> 00:33:03,766
+but here if I just
+
+679
+00:33:04,000 --> 00:33:07,066
+name this one we see that we will see that here
+
+680
+00:33:07,066 --> 00:33:08,866
+we will automatically
+
+681
+00:33:08,866 --> 00:33:11,066
+tell that we want to override this method
+
+682
+00:33:11,066 --> 00:33:13,066
+okay so let's override it
+
+683
+00:33:13,300 --> 00:33:14,733
+just to be um
+
+684
+00:33:14,733 --> 00:33:18,299
+to be more visible or like better visible for you
+
+685
+00:33:18,500 --> 00:33:20,566
+I will rename this one to password
+
+686
+00:33:20,566 --> 00:33:23,566
+and here for this password I will just return my
+
+687
+00:33:23,566 --> 00:33:25,133
+my password okay
+
+688
+00:33:25,366 --> 00:33:27,699
+so I just wanted to mention this one
+
+689
+00:33:27,700 --> 00:33:29,100
+so in the next time
+
+690
+00:33:29,100 --> 00:33:29,733
+or like
+
+691
+00:33:29,733 --> 00:33:32,866
+when you have a different name for this password field
+
+692
+00:33:32,866 --> 00:33:35,999
+you don't get surprised when you see this get password
+
+693
+00:33:36,000 --> 00:33:38,500
+or when you have this password exactly
+
+694
+00:33:38,500 --> 00:33:39,700
+like that and you don't see it
+
+695
+00:33:39,700 --> 00:33:41,266
+so now you know the reason why
+
+696
+00:33:42,300 --> 00:33:45,866
+okay so now we have everything we need within our user
+
+697
+00:33:45,866 --> 00:33:47,866
+details so we created a new role
+
+698
+00:33:47,966 --> 00:33:49,333
+and we over written
+
+699
+00:33:49,333 --> 00:33:52,899
+or we defined all the methods that are required by
+
+700
+00:33:53,000 --> 00:33:54,600
+spring security
+
+701
+00:34:05,533 --> 00:34:07,099
+now our user is ready
+
+702
+00:34:07,100 --> 00:34:10,466
+so let's move on and create a repository for that
+
+703
+00:34:10,600 --> 00:34:14,600
+user class so the repository is the class
+
+704
+00:34:14,933 --> 00:34:17,966
+which is responsible to communicate with the database
+
+705
+00:34:18,300 --> 00:34:20,766
+so when working with spring data GPA
+
+706
+00:34:20,766 --> 00:34:21,966
+we don't need to create a class
+
+707
+00:34:21,966 --> 00:34:24,466
+all we need to do is create an interface
+
+708
+00:34:24,533 --> 00:34:27,266
+and let's call it user repository
+
+709
+00:34:29,533 --> 00:34:33,366
+and this use a repository to make it a repository
+
+710
+00:34:33,400 --> 00:34:35,900
+all we need to do is to extend
+
+711
+00:34:36,566 --> 00:34:39,799
+another interface called JPA repository
+
+712
+00:34:39,800 --> 00:34:41,800
+okay and as you can see here
+
+713
+00:34:41,800 --> 00:34:45,800
+this JPA repository is from spring framework data JPA
+
+714
+00:34:45,800 --> 00:34:46,900
+and so on so forth
+
+715
+00:34:47,066 --> 00:34:50,333
+and it's a generic interface that takes a t
+
+716
+00:34:50,333 --> 00:34:53,066
+so which is the class and an ID
+
+717
+00:34:53,466 --> 00:34:56,666
+which should be the ID of our user class
+
+718
+00:34:56,700 --> 00:35:00,100
+so let's use this one and pass these types
+
+719
+00:35:00,266 --> 00:35:04,933
+so this the user and we used antiger as an ID
+
+720
+00:35:04,933 --> 00:35:07,266
+so let's pass antiger right here
+
+721
+00:35:08,100 --> 00:35:10,366
+okay so now our repository is ready
+
+722
+00:35:10,366 --> 00:35:13,966
+and as you know the spring data JPA has also
+
+723
+00:35:14,066 --> 00:35:17,199
+a bench of methods or ready to use methods
+
+724
+00:35:17,366 --> 00:35:20,966
+like save find all find by ID and so on so forth
+
+725
+00:35:20,966 --> 00:35:21,666
+okay
+
+726
+00:35:21,666 --> 00:35:25,966
+now I will create one method that we will need later on
+
+727
+00:35:26,600 --> 00:35:28,266
+and this method
+
+728
+00:35:29,200 --> 00:35:33,000
+will try to retrieve or find a user by email
+
+729
+00:35:33,166 --> 00:35:34,766
+because email is unique
+
+730
+00:35:34,766 --> 00:35:37,499
+so we need to find or we need to fetch
+
+731
+00:35:37,600 --> 00:35:39,200
+a user by its email
+
+732
+00:35:39,200 --> 00:35:42,666
+alright so I'm going to create this optional
+
+733
+00:35:43,666 --> 00:35:46,733
+user and like optional is a generic type
+
+734
+00:35:46,733 --> 00:35:48,366
+so it's an optional of user
+
+735
+00:35:48,366 --> 00:35:50,499
+and here I will use the query method
+
+736
+00:35:50,600 --> 00:35:54,333
+provided by spring and I will use the method find by
+
+737
+00:35:54,733 --> 00:35:56,299
+and here all you need to do
+
+738
+00:35:56,300 --> 00:35:57,566
+is providing
+
+739
+00:35:57,566 --> 00:35:59,099
+the attribute or the field
+
+740
+00:35:59,100 --> 00:36:00,966
+name that you have within your class
+
+741
+00:36:01,066 --> 00:36:02,866
+so for our case its email
+
+742
+00:36:02,866 --> 00:36:06,333
+for example if you use username just find by username
+
+743
+00:36:06,700 --> 00:36:10,266
+and here all you need to do is to pass string email
+
+744
+00:36:10,966 --> 00:36:12,166
+alright so
+
+745
+00:36:13,266 --> 00:36:16,733
+this is it now we have our repository ready to use
+
+746
+00:36:16,733 --> 00:36:18,699
+let's move on to the next steps
+
+747
+00:36:34,166 --> 00:36:36,166
+when we check again our
+
+748
+00:36:36,266 --> 00:36:37,466
+schema right here
+
+749
+00:36:37,466 --> 00:36:39,766
+and the architecture that we have right here
+
+750
+00:36:39,933 --> 00:36:43,266
+so we see that the 1st thing that we will get
+
+751
+00:36:43,400 --> 00:36:47,266
+or the 1st thing that will intercept our http request
+
+752
+00:36:47,266 --> 00:36:50,733
+is the JWT orphantication filter
+
+753
+00:36:51,166 --> 00:36:54,699
+so let's go ahead and create this filter
+
+754
+00:36:57,966 --> 00:37:01,699
+so here within our base package right click right here
+
+755
+00:37:02,066 --> 00:37:02,866
+new
+
+756
+00:37:03,266 --> 00:37:06,766
+and I will create a new package I will call it config
+
+757
+00:37:07,733 --> 00:37:08,533
+so I want
+
+758
+00:37:08,566 --> 00:37:11,666
+all this to be part of my configuration package
+
+759
+00:37:11,900 --> 00:37:17,166
+and I will create a JWT authentication filter
+
+760
+00:37:17,400 --> 00:37:19,000
+I will call it like that
+
+761
+00:37:20,133 --> 00:37:23,699
+so this is our authentication filter class
+
+762
+00:37:23,766 --> 00:37:26,466
+and now in order to make it a filter
+
+763
+00:37:26,466 --> 00:37:28,299
+we have multiple options
+
+764
+00:37:28,300 --> 00:37:30,566
+okay but here
+
+765
+00:37:30,900 --> 00:37:34,733
+as we can see in the skima right here we have the
+
+766
+00:37:34,733 --> 00:37:36,799
+we want this filter to be
+
+767
+00:37:36,800 --> 00:37:39,700
+active every time we get a request
+
+768
+00:37:39,766 --> 00:37:41,866
+so every time the user sends a request
+
+769
+00:37:41,866 --> 00:37:44,599
+we want our filter to get fired and
+
+770
+00:37:44,600 --> 00:37:46,166
+do all the job that we want
+
+771
+00:37:46,166 --> 00:37:47,766
+that we wanted to do okay
+
+772
+00:37:49,100 --> 00:37:52,700
+so this one we need to extend
+
+773
+00:37:53,400 --> 00:37:57,100
+a class called one's per request filter
+
+774
+00:37:57,100 --> 00:38:02,133
+and as the name indicates it will be a filter by one
+
+775
+00:38:02,300 --> 00:38:03,300
+every request
+
+776
+00:38:03,333 --> 00:38:06,266
+so let me download the data source
+
+777
+00:38:06,333 --> 00:38:07,966
+and you can see here
+
+778
+00:38:08,733 --> 00:38:10,566
+a one spread quest filter
+
+779
+00:38:10,566 --> 00:38:12,733
+extend already generic filter bean
+
+780
+00:38:12,733 --> 00:38:14,399
+and this generic filter bean
+
+781
+00:38:14,533 --> 00:38:17,866
+already implements the interface called filter
+
+782
+00:38:17,866 --> 00:38:20,333
+so for us we had 2 options
+
+783
+00:38:20,366 --> 00:38:22,333
+whether using or extending
+
+784
+00:38:22,333 --> 00:38:24,099
+this one spare request filter
+
+785
+00:38:24,166 --> 00:38:27,866
+or implementing the filter interface right here
+
+786
+00:38:27,866 --> 00:38:31,299
+so it will be the same but let's use something
+
+787
+00:38:31,733 --> 00:38:33,266
+already provided by spring
+
+788
+00:38:33,366 --> 00:38:36,366
+so it's better to use the one's per request filter
+
+789
+00:38:36,466 --> 00:38:40,133
+so now let's implement the methods
+
+790
+00:38:41,000 --> 00:38:44,500
+and we see here that we have a method called do
+
+791
+00:38:44,700 --> 00:38:45,766
+filter internal
+
+792
+00:38:45,766 --> 00:38:47,499
+and we have 3 parameters
+
+793
+00:38:47,500 --> 00:38:50,566
+the request the response and the filter chain
+
+794
+00:38:50,666 --> 00:38:52,866
+let me explain each part of it
+
+795
+00:38:53,533 --> 00:38:56,766
+I will just in line these parameters right here
+
+796
+00:38:56,766 --> 00:38:58,699
+so you can see all of it
+
+797
+00:39:01,900 --> 00:39:03,666
+so these are our
+
+798
+00:39:05,000 --> 00:39:09,700
+parameters so here what we have we have this HDB
+
+799
+00:39:10,133 --> 00:39:12,799
+service request the response and the fitter chain
+
+800
+00:39:12,800 --> 00:39:14,866
+so the request is our request
+
+801
+00:39:14,900 --> 00:39:17,100
+and the response is also our response
+
+802
+00:39:17,100 --> 00:39:19,466
+so we can intercept
+
+803
+00:39:19,566 --> 00:39:22,666
+every request and make an extract data
+
+804
+00:39:22,900 --> 00:39:24,966
+for example from the request and
+
+805
+00:39:25,200 --> 00:39:27,533
+provide new data within the response
+
+806
+00:39:27,533 --> 00:39:28,933
+so for example if I want
+
+807
+00:39:29,066 --> 00:39:31,333
+to add a header to my response
+
+808
+00:39:31,333 --> 00:39:34,966
+we can do it using this one spread request filter
+
+809
+00:39:35,066 --> 00:39:37,599
+okay and the filter chain is the
+
+810
+00:39:37,900 --> 00:39:40,733
+chain of responsibility design pattern
+
+811
+00:39:40,733 --> 00:39:41,533
+so
+
+812
+00:39:41,800 --> 00:39:45,266
+it contains the list of the other filters that we need
+
+813
+00:39:45,866 --> 00:39:46,866
+we need to execute
+
+814
+00:39:46,866 --> 00:39:48,966
+so when we call this filter chain dot
+
+815
+00:39:48,966 --> 00:39:50,599
+do internal filter
+
+816
+00:39:50,666 --> 00:39:51,899
+or do filter
+
+817
+00:39:51,933 --> 00:39:55,666
+it will call the next filter within the chain
+
+818
+00:39:55,733 --> 00:39:59,133
+so here I want just remove this
+
+819
+00:40:01,266 --> 00:40:02,999
+these warnings so because
+
+820
+00:40:04,100 --> 00:40:06,766
+these 3 parameters they should not be null
+
+821
+00:40:06,766 --> 00:40:09,299
+and to do so I will just add this
+
+822
+00:40:09,700 --> 00:40:10,733
+non null
+
+823
+00:40:10,966 --> 00:40:14,099
+annotation the one from spring framework to tank
+
+824
+00:40:15,733 --> 00:40:19,866
+and I'm going to copy paste it and move it and put it
+
+825
+00:40:20,166 --> 00:40:21,199
+in here okay
+
+826
+00:40:21,500 --> 00:40:24,300
+so like this we no longer have this warning
+
+827
+00:40:24,600 --> 00:40:26,566
+and now the last thing to do
+
+828
+00:40:26,566 --> 00:40:29,299
+before moving on and start implementing this
+
+829
+00:40:29,333 --> 00:40:31,666
+the last thing to do is we need to tell
+
+830
+00:40:31,666 --> 00:40:32,899
+spring that we want
+
+831
+00:40:32,900 --> 00:40:35,100
+this class to be managed being
+
+832
+00:40:35,133 --> 00:40:36,899
+okay or to become a spring being
+
+833
+00:40:37,066 --> 00:40:39,199
+and to do so we need to annotate
+
+834
+00:40:39,200 --> 00:40:41,066
+whether with service annotation
+
+835
+00:40:41,066 --> 00:40:42,599
+or component annotation
+
+836
+00:40:42,900 --> 00:40:44,100
+or also repository
+
+837
+00:40:44,100 --> 00:40:47,200
+it works because 3 of them are the same annotation
+
+838
+00:40:47,500 --> 00:40:49,700
+the repository and the service
+
+839
+00:40:49,700 --> 00:40:51,766
+they both extend the component
+
+840
+00:40:52,200 --> 00:40:55,733
+but I will just make it a component right here
+
+841
+00:40:56,200 --> 00:40:59,400
+and also I will use another
+
+842
+00:40:59,566 --> 00:41:01,533
+long book annotation which is
+
+843
+00:41:01,700 --> 00:41:03,766
+the required arx constructor
+
+844
+00:41:03,900 --> 00:41:06,300
+and this required arx constructor
+
+845
+00:41:06,300 --> 00:41:09,566
+it will create a constructor using any
+
+846
+00:41:09,866 --> 00:41:12,566
+final field that we declare right here
+
+847
+00:41:12,566 --> 00:41:14,266
+so for example if I use
+
+848
+00:41:14,533 --> 00:41:18,066
+if I do private final string my string
+
+849
+00:41:18,466 --> 00:41:21,566
+this annotation it will create
+
+850
+00:41:22,300 --> 00:41:25,500
+a constructor using this private final field
+
+851
+00:41:25,500 --> 00:41:26,933
+okay so
+
+852
+00:41:27,600 --> 00:41:29,300
+now we have our
+
+853
+00:41:29,766 --> 00:41:31,199
+filter rated use
+
+854
+00:41:31,200 --> 00:41:34,900
+let s now start implementing it part by part
+
+855
+00:41:45,500 --> 00:41:47,300
+from this diagram right here
+
+856
+00:41:47,300 --> 00:41:49,600
+we see that the 1st thing that
+
+857
+00:41:49,700 --> 00:41:50,933
+gets executed
+
+858
+00:41:50,933 --> 00:41:52,599
+or the 1st thing we do within
+
+859
+00:41:52,600 --> 00:41:54,966
+this JWT authentication filter
+
+860
+00:41:55,166 --> 00:41:58,733
+is checking if we have the JWT token
+
+861
+00:41:58,800 --> 00:42:01,933
+okay so let's move on and implement this
+
+862
+00:42:04,866 --> 00:42:10,199
+alright to do so within our method do internal filter
+
+863
+00:42:10,266 --> 00:42:12,466
+let s try to perform some
+
+864
+00:42:13,133 --> 00:42:14,366
+operations okay
+
+865
+00:42:14,500 --> 00:42:17,333
+so 1st of all I will create a string
+
+866
+00:42:17,500 --> 00:42:19,700
+I will call it authonication header
+
+867
+00:42:19,800 --> 00:42:21,100
+alright why
+
+868
+00:42:21,300 --> 00:42:23,600
+because when we make a call
+
+869
+00:42:23,733 --> 00:42:27,099
+we need to pass the JWT authonication
+
+870
+00:42:27,466 --> 00:42:29,366
+token within the header
+
+871
+00:42:29,366 --> 00:42:33,133
+so it should be within a header called authorization
+
+872
+00:42:33,133 --> 00:42:35,466
+so what we need to do here is
+
+873
+00:42:36,133 --> 00:42:38,466
+try to extract this header
+
+874
+00:42:38,466 --> 00:42:39,266
+okay
+
+875
+00:42:39,366 --> 00:42:43,666
+so this authentication header is part of our request
+
+876
+00:42:44,700 --> 00:42:47,333
+and from the request we can call a method
+
+877
+00:42:47,333 --> 00:42:48,699
+called get header
+
+878
+00:42:48,700 --> 00:42:51,000
+and within the header we can
+
+879
+00:42:51,000 --> 00:42:53,566
+all we need to do is to pass the header name
+
+880
+00:42:53,900 --> 00:42:54,700
+so
+
+881
+00:42:55,000 --> 00:42:57,966
+our header is called authorization
+
+882
+00:42:57,966 --> 00:42:58,933
+like that
+
+883
+00:42:59,200 --> 00:43:02,900
+so this is the header that contains the JWT token
+
+884
+00:43:02,900 --> 00:43:04,100
+or the bureau token
+
+885
+00:43:04,100 --> 00:43:05,733
+we call it also bureau token
+
+886
+00:43:05,866 --> 00:43:06,666
+okay
+
+887
+00:43:07,500 --> 00:43:11,866
+alright so now I will create another variable
+
+888
+00:43:11,866 --> 00:43:14,866
+let's also make a final string
+
+889
+00:43:15,200 --> 00:43:19,366
+I recall it JWT or JWT token call it whatever you want
+
+890
+00:43:19,900 --> 00:43:24,333
+so here I want to implement this check that we did
+
+891
+00:43:24,466 --> 00:43:25,566
+before so
+
+892
+00:43:25,966 --> 00:43:29,933
+we talk about here we talk about this check JWT token
+
+893
+00:43:29,933 --> 00:43:31,999
+so let's go let's implement this
+
+894
+00:43:32,866 --> 00:43:36,533
+so here the test that I want to do is if
+
+895
+00:43:36,600 --> 00:43:40,533
+the authorization header is null
+
+896
+00:43:40,866 --> 00:43:42,999
+so I want to do an early return
+
+897
+00:43:43,966 --> 00:43:44,766
+or
+
+898
+00:43:45,133 --> 00:43:48,733
+if not my authorization header
+
+899
+00:43:49,166 --> 00:43:52,766
+starts with because as I told you the beer token
+
+900
+00:43:53,000 --> 00:43:53,800
+should be
+
+901
+00:43:53,900 --> 00:43:57,500
+always or should start always with the keyword beer
+
+902
+00:43:57,533 --> 00:44:00,599
+okay and it should be exactly like that
+
+903
+00:44:00,600 --> 00:44:02,200
+and then we have a space
+
+904
+00:44:02,366 --> 00:44:04,966
+so if we don't have these 2 conditions
+
+905
+00:44:05,500 --> 00:44:08,900
+all I need to do is call the filter chain dot
+
+906
+00:44:09,066 --> 00:44:12,333
+do filter and I need to pass the request
+
+907
+00:44:12,333 --> 00:44:15,366
+and the response to the next filter
+
+908
+00:44:15,366 --> 00:44:19,499
+okay and here don't forget to call the return
+
+909
+00:44:19,700 --> 00:44:20,566
+so we call in
+
+910
+00:44:20,733 --> 00:44:24,099
+so we want we don't want to continue with the
+
+911
+00:44:24,100 --> 00:44:25,566
+execution of the rest
+
+912
+00:44:25,933 --> 00:44:27,699
+of that one okay
+
+913
+00:44:28,166 --> 00:44:28,966
+so
+
+914
+00:44:29,600 --> 00:44:31,200
+here this is the check
+
+915
+00:44:32,133 --> 00:44:33,499
+that we implemented
+
+916
+00:44:33,500 --> 00:44:38,800
+now let's try to extract the token from this header
+
+917
+00:44:38,866 --> 00:44:40,766
+okay from this authontication header
+
+918
+00:44:41,900 --> 00:44:46,900
+the next step is we created already a JW team variable
+
+919
+00:44:46,900 --> 00:44:51,666
+now I want to extract this token from
+
+920
+00:44:51,933 --> 00:44:53,266
+my authentication header
+
+921
+00:44:53,266 --> 00:44:55,166
+or from my authorization header
+
+922
+00:44:55,300 --> 00:44:57,566
+and I want to do a sub string
+
+923
+00:44:57,700 --> 00:45:00,400
+starting from the position number 7
+
+924
+00:45:00,566 --> 00:45:02,066
+and why position number 7
+
+925
+00:45:02,266 --> 00:45:05,933
+because if we count this beer with this space
+
+926
+00:45:06,400 --> 00:45:08,066
+the count is 7
+
+927
+00:45:08,066 --> 00:45:12,666
+okay so let's move on and check what we need to do next
+
+928
+00:45:21,700 --> 00:45:23,933
+after checking the JWT token
+
+929
+00:45:23,933 --> 00:45:27,599
+what we need to do is to call this user detailed
+
+930
+00:45:27,600 --> 00:45:30,133
+service to check if we have the user
+
+931
+00:45:30,200 --> 00:45:32,466
+already within our database or not
+
+932
+00:45:32,666 --> 00:45:38,499
+okay but to do that we need to call a JWT service
+
+933
+00:45:38,533 --> 00:45:41,399
+here to extract the user name
+
+934
+00:45:41,500 --> 00:45:45,000
+alright so let me show you what we need to do
+
+935
+00:45:45,533 --> 00:45:46,533
+so right here
+
+936
+00:45:46,600 --> 00:45:50,466
+I will just go back and create a final string
+
+937
+00:45:50,733 --> 00:45:53,866
+username or email call it whatever you want
+
+938
+00:45:54,200 --> 00:45:57,100
+so I'm just gonna call it user email
+
+939
+00:45:57,166 --> 00:46:00,666
+okay to be consistent and avoid confusions
+
+940
+00:46:00,766 --> 00:46:02,566
+so I will call it user email
+
+941
+00:46:02,700 --> 00:46:05,766
+so after extracting the JWT token
+
+942
+00:46:05,800 --> 00:46:08,466
+what I need to do is I want to extract
+
+943
+00:46:08,500 --> 00:46:10,200
+also this user email
+
+944
+00:46:13,066 --> 00:46:15,499
+so these user email equals
+
+945
+00:46:17,600 --> 00:46:20,800
+and here I will add it to do extract
+
+946
+00:46:21,200 --> 00:46:22,766
+the user email
+
+947
+00:46:23,966 --> 00:46:28,066
+okay but to do so I need to extract it from
+
+948
+00:46:28,066 --> 00:46:30,733
+let me add it here from JWT token
+
+949
+00:46:30,900 --> 00:46:34,333
+so to extract this user email from the token
+
+950
+00:46:34,466 --> 00:46:37,733
+I need a class that can manipulate
+
+951
+00:46:38,466 --> 00:46:40,199
+this JWT token
+
+952
+00:46:40,266 --> 00:46:41,699
+okay so
+
+953
+00:46:42,266 --> 00:46:45,966
+let's try now to implement this class
+
+954
+00:46:45,966 --> 00:46:48,099
+this class I will call it here
+
+955
+00:46:48,100 --> 00:46:50,800
+I will just create my class here
+
+956
+00:46:51,200 --> 00:46:54,900
+private final I will call it JWT service
+
+957
+00:46:56,333 --> 00:46:59,299
+so I don't have yet this JWT service
+
+958
+00:46:59,466 --> 00:47:03,999
+but within this JWT service at what I want to do here
+
+959
+00:47:04,166 --> 00:47:07,766
+I want to use a method that I will call it for example
+
+960
+00:47:07,800 --> 00:47:10,566
+JWT extract username
+
+961
+00:47:10,600 --> 00:47:14,900
+okay so let me call this JWT service
+
+962
+00:47:15,100 --> 00:47:15,900
+dot
+
+963
+00:47:16,900 --> 00:47:20,566
+extract user name or user email
+
+964
+00:47:20,566 --> 00:47:23,499
+okay let's keep it username within the JWT
+
+965
+00:47:23,500 --> 00:47:26,166
+because mainly with spring security we talk about
+
+966
+00:47:26,266 --> 00:47:27,499
+user names
+
+967
+00:47:27,533 --> 00:47:31,066
+and to extract this one I need to pass the JWT
+
+968
+00:47:31,066 --> 00:47:32,466
+as a parameter
+
+969
+00:47:32,466 --> 00:47:33,266
+okay
+
+970
+00:47:33,733 --> 00:47:34,533
+so
+
+971
+00:47:35,166 --> 00:47:37,133
+I will create this class
+
+972
+00:47:38,500 --> 00:47:39,733
+now I will ask
+
+973
+00:47:40,200 --> 00:47:42,866
+until the J to create this class JWT service
+
+974
+00:47:42,866 --> 00:47:44,199
+and I will create it
+
+975
+00:47:44,300 --> 00:47:45,500
+you can keep it whether
+
+976
+00:47:47,200 --> 00:47:48,266
+with the config package
+
+977
+00:47:48,266 --> 00:47:49,899
+or you can move it to the front one
+
+978
+00:47:50,200 --> 00:47:53,466
+so I will keep it within this package
+
+979
+00:47:53,466 --> 00:47:56,899
+and also do not forget to add this service annotation
+
+980
+00:47:56,900 --> 00:48:00,133
+to make it or to transform it to a managed bean
+
+981
+00:48:00,333 --> 00:48:00,866
+alright
+
+982
+00:48:00,866 --> 00:48:06,933
+so now I will just create this extract username method
+
+983
+00:48:08,466 --> 00:48:12,766
+so create method extract username in JWT service
+
+984
+00:48:12,866 --> 00:48:14,866
+and yes this is what I want to do
+
+985
+00:48:14,866 --> 00:48:16,966
+I need a method that will
+
+986
+00:48:17,333 --> 00:48:19,899
+return a string username
+
+987
+00:48:20,866 --> 00:48:25,066
+and it takes as a parameter string token or string JWT
+
+988
+00:48:25,066 --> 00:48:27,166
+okay so let me call this one token
+
+989
+00:48:28,100 --> 00:48:29,800
+I think it would be better as a name
+
+990
+00:48:30,100 --> 00:48:31,700
+and yeah that's it
+
+991
+00:48:31,700 --> 00:48:35,200
+so I will just return now for the moment
+
+992
+00:48:35,666 --> 00:48:38,666
+and let's move on and they will show you how we can
+
+993
+00:48:38,933 --> 00:48:40,099
+how we can implement
+
+994
+00:48:40,100 --> 00:48:42,966
+or how we can extract this information from our
+
+995
+00:48:42,966 --> 00:48:44,466
+JWT service
+
+996
+00:48:52,400 --> 00:48:57,300
+so now in order to be able to manipulate JWT tokens
+
+997
+00:48:57,300 --> 00:48:58,400
+generating one
+
+998
+00:48:58,400 --> 00:49:00,533
+extracting information from the token
+
+999
+00:49:00,533 --> 00:49:02,799
+validating the token and so on so forth
+
+1000
+00:49:03,166 --> 00:49:04,466
+we need to include
+
+1001
+00:49:04,533 --> 00:49:07,266
+new dependencies within our application
+
+1002
+00:49:07,266 --> 00:49:11,399
+so let's go open our palm XML file
+
+1003
+00:49:12,000 --> 00:49:14,500
+and here within this palm XML
+
+1004
+00:49:14,500 --> 00:49:17,066
+scroll down and go next to the long book
+
+1005
+00:49:17,066 --> 00:49:19,566
+or post degree ascretel dependency
+
+1006
+00:49:19,900 --> 00:49:22,966
+and here just add a new dependency
+
+1007
+00:49:24,000 --> 00:49:29,066
+and this is the 1st one called JJWT API dash API
+
+1008
+00:49:29,333 --> 00:49:33,599
+and it's from AIO just dot JSON web token
+
+1009
+00:49:33,600 --> 00:49:38,300
+okay and the recent version at this time is the 0115
+
+1010
+00:49:38,400 --> 00:49:39,966
+so let's use this one
+
+1011
+00:49:40,300 --> 00:49:43,133
+we need also to add another dependency
+
+1012
+00:49:44,266 --> 00:49:46,499
+which is also from the same artifact
+
+1013
+00:49:47,000 --> 00:49:50,066
+from the same group ID but it's a different artifact
+
+1014
+00:49:50,366 --> 00:49:53,733
+so we need a JJWT implementation
+
+1015
+00:49:54,133 --> 00:49:56,466
+so it's called JJWT
+
+1016
+00:49:57,166 --> 00:49:59,166
+and from the same group ID
+
+1017
+00:49:59,266 --> 00:50:02,133
+also the same version you can extract this version to
+
+1018
+00:50:02,900 --> 00:50:04,966
+a property and use it from there
+
+1019
+00:50:05,333 --> 00:50:11,666
+and next we need a final dependency which is the JJWT
+
+1020
+00:50:11,800 --> 00:50:13,533
+Jackson okay
+
+1021
+00:50:13,700 --> 00:50:18,166
+so also from the same group ID and the same version too
+
+1022
+00:50:18,400 --> 00:50:20,100
+now once we add
+
+1023
+00:50:20,366 --> 00:50:22,333
+or once you add these dependencies
+
+1024
+00:50:22,333 --> 00:50:24,733
+or any dependency to your palm XML
+
+1025
+00:50:24,733 --> 00:50:27,099
+or if you make any updates to your palm XML
+
+1026
+00:50:27,100 --> 00:50:28,866
+make sure you click this button
+
+1027
+00:50:29,100 --> 00:50:30,733
+load maven project
+
+1028
+00:50:31,066 --> 00:50:34,499
+but also if you don't see this button just right click
+
+1029
+00:50:35,166 --> 00:50:36,299
+inside the bomb
+
+1030
+00:50:36,400 --> 00:50:37,333
+XML file
+
+1031
+00:50:37,333 --> 00:50:40,166
+maven and then you have the option reload project
+
+1032
+00:50:40,166 --> 00:50:42,933
+okay so antilly J will download
+
+1033
+00:50:43,066 --> 00:50:45,066
+all the dependencies and add them
+
+1034
+00:50:45,300 --> 00:50:46,366
+to the class path
+
+1035
+00:50:46,733 --> 00:50:50,066
+alright so our dependencies are ready to use
+
+1036
+00:50:50,066 --> 00:50:53,899
+now we will go back and implement this JWT service
+
+1037
+00:51:03,533 --> 00:51:06,333
+so before we go and implement
+
+1038
+00:51:06,333 --> 00:51:08,899
+all the services and dive too much into the code
+
+1039
+00:51:08,900 --> 00:51:10,533
+let's 1st try to
+
+1040
+00:51:10,600 --> 00:51:13,066
+understand what is a JWT token
+
+1041
+00:51:13,666 --> 00:51:17,566
+so a JWT token stands for a JSON web token
+
+1042
+00:51:17,766 --> 00:51:20,099
+which is a compact URL safe
+
+1043
+00:51:20,200 --> 00:51:25,400
+means of representing claims to be transferred
+
+1044
+00:51:25,400 --> 00:51:26,566
+between 2 parties
+
+1045
+00:51:26,933 --> 00:51:31,166
+the claims in JWT are encoded as JSON object
+
+1046
+00:51:31,400 --> 00:51:35,533
+that is digitally signed using a JSON web signature
+
+1047
+00:51:35,600 --> 00:51:40,700
+okay so the JWT consists of 3 parts
+
+1048
+00:51:40,933 --> 00:51:42,666
+so here we have the header
+
+1049
+00:51:42,666 --> 00:51:46,133
+we have the payload and also we have the signature
+
+1050
+00:51:46,533 --> 00:51:49,699
+so the header typically consists of 2 parts
+
+1051
+00:51:49,933 --> 00:51:54,533
+the 1st one is the type of the token which is JWT
+
+1052
+00:51:54,800 --> 00:51:58,200
+and the sign in algorithm being used
+
+1053
+00:51:58,333 --> 00:52:03,533
+such as for example HMAC or SH 256 or
+
+1054
+00:52:04,200 --> 00:52:05,600
+RSA okay
+
+1055
+00:52:05,800 --> 00:52:08,366
+the 2nd part of the token is the payload
+
+1056
+00:52:08,366 --> 00:52:10,533
+which contains the claims
+
+1057
+00:52:10,966 --> 00:52:15,466
+claims are statement about an entity typically the user
+
+1058
+00:52:15,733 --> 00:52:17,333
+and additional data
+
+1059
+00:52:17,333 --> 00:52:19,666
+so as we can see here we have the subject
+
+1060
+00:52:19,666 --> 00:52:20,466
+we have the name
+
+1061
+00:52:20,466 --> 00:52:23,266
+we have this IAT we have
+
+1062
+00:52:23,333 --> 00:52:25,599
+we can have also extra information
+
+1063
+00:52:25,600 --> 00:52:27,733
+like authorities or extra claims
+
+1064
+00:52:27,733 --> 00:52:29,199
+right here okay
+
+1065
+00:52:30,100 --> 00:52:30,900
+so
+
+1066
+00:52:31,300 --> 00:52:34,200
+there are 3 types of claims registered
+
+1067
+00:52:34,200 --> 00:52:35,933
+public and private claims
+
+1068
+00:52:35,933 --> 00:52:36,766
+the registered
+
+1069
+00:52:36,766 --> 00:52:40,699
+claim claims are a set of predefined claims
+
+1070
+00:52:40,733 --> 00:52:43,533
+which are not mandatory but recommended
+
+1071
+00:52:43,666 --> 00:52:47,566
+to provide a set of useful intropuable claims
+
+1072
+00:52:47,766 --> 00:52:51,266
+some of the registered claims R is a R
+
+1073
+00:52:51,333 --> 00:52:53,166
+ISS or the issuer
+
+1074
+00:52:53,300 --> 00:52:56,200
+we also have the subject the OD
+
+1075
+00:52:56,200 --> 00:52:59,900
+the X exb like the expiration time on so on
+
+1076
+00:52:59,900 --> 00:53:00,700
+so far
+
+1077
+00:53:01,400 --> 00:53:02,966
+this we will see when we
+
+1078
+00:53:02,966 --> 00:53:05,499
+will implement the token generations
+
+1079
+00:53:06,000 --> 00:53:08,200
+we have also the public claims
+
+1080
+00:53:08,200 --> 00:53:11,366
+which are the claims that are defined within
+
+1081
+00:53:11,366 --> 00:53:15,066
+the IA and ajson web token registry
+
+1082
+00:53:15,100 --> 00:53:17,533
+or public by nature
+
+1083
+00:53:17,766 --> 00:53:19,333
+private claims are
+
+1084
+00:53:19,900 --> 00:53:21,600
+custom claims created
+
+1085
+00:53:21,600 --> 00:53:23,900
+to share information between parties
+
+1086
+00:53:24,200 --> 00:53:26,166
+that agree using them
+
+1087
+00:53:26,300 --> 00:53:27,100
+okay
+
+1088
+00:53:27,600 --> 00:53:28,400
+the last one
+
+1089
+00:53:28,400 --> 00:53:32,100
+or the 3rd part of the token is the signature
+
+1090
+00:53:32,100 --> 00:53:36,066
+which is used to verify the center of the JWT
+
+1091
+00:53:36,200 --> 00:53:38,700
+is who it is claims to be
+
+1092
+00:53:38,866 --> 00:53:40,166
+and to ensure
+
+1093
+00:53:40,166 --> 00:53:43,133
+that the message wasn't changed along the way
+
+1094
+00:53:43,500 --> 00:53:46,400
+okay so now let's move on to the code
+
+1095
+00:53:46,400 --> 00:53:48,300
+and see how we can generate
+
+1096
+00:53:48,300 --> 00:53:49,300
+or how we can
+
+1097
+00:53:49,933 --> 00:53:53,099
+extract claims from this JWT token
+
+1098
+00:53:53,200 --> 00:53:57,133
+okay so also within this JWT website
+
+1099
+00:53:57,266 --> 00:53:59,499
+you can play with the payload
+
+1100
+00:53:59,500 --> 00:54:01,200
+you can add some information here
+
+1101
+00:54:01,200 --> 00:54:03,166
+and as you can see everything you add some
+
+1102
+00:54:03,266 --> 00:54:04,533
+every time you add something
+
+1103
+00:54:04,533 --> 00:54:06,733
+you see that it changes right here
+
+1104
+00:54:06,733 --> 00:54:09,666
+okay let's move on and go back to our code
+
+1105
+00:54:17,566 --> 00:54:18,699
+now before
+
+1106
+00:54:18,966 --> 00:54:22,199
+start implementing this extract username method
+
+1107
+00:54:22,266 --> 00:54:26,199
+I want to implement or write some code to extract
+
+1108
+00:54:26,733 --> 00:54:29,166
+all the claimed and also another method to
+
+1109
+00:54:29,366 --> 00:54:32,666
+that allow us to extract one single claim
+
+1110
+00:54:32,666 --> 00:54:33,933
+okay so
+
+1111
+00:54:34,466 --> 00:54:36,799
+1st of all I want to create this method
+
+1112
+00:54:36,800 --> 00:54:39,366
+I will it will return acclaims
+
+1113
+00:54:39,933 --> 00:54:41,266
+and these claims
+
+1114
+00:54:41,266 --> 00:54:44,566
+if you see right here when you click on import class
+
+1115
+00:54:44,566 --> 00:54:46,066
+it's the one from Io
+
+1116
+00:54:46,166 --> 00:54:47,733
+jsonwebtoken claims
+
+1117
+00:54:47,733 --> 00:54:50,133
+it's the dependency that we just added
+
+1118
+00:54:50,400 --> 00:54:52,800
+so these claims I will call this method
+
+1119
+00:54:52,800 --> 00:54:54,366
+extract all claims
+
+1120
+00:54:55,533 --> 00:54:58,066
+okay so this extract or claims
+
+1121
+00:54:58,066 --> 00:55:01,699
+of course it will take a string token asparampter
+
+1122
+00:55:02,300 --> 00:55:05,700
+and now I will show you how to extract this
+
+1123
+00:55:05,900 --> 00:55:07,266
+so to do it
+
+1124
+00:55:07,933 --> 00:55:09,699
+we need to return
+
+1125
+00:55:10,366 --> 00:55:16,333
+our JWTS and this JWTS is also from
+
+1126
+00:55:16,400 --> 00:55:21,666
+so this JWTS is also from the Io dot JSON web token
+
+1127
+00:55:21,766 --> 00:55:26,266
+and we need this JWTS dot pars builder
+
+1128
+00:55:26,300 --> 00:55:29,333
+and in order to pass this builder or the
+
+1129
+00:55:29,333 --> 00:55:30,866
+TOPAS the token
+
+1130
+00:55:31,100 --> 00:55:34,500
+and here we need to set the signing key
+
+1131
+00:55:34,500 --> 00:55:36,766
+okay set signing key
+
+1132
+00:55:36,766 --> 00:55:38,533
+because as we mentioned before
+
+1133
+00:55:39,066 --> 00:55:41,733
+when we try to create
+
+1134
+00:55:41,800 --> 00:55:43,733
+to generate or to decode a token
+
+1135
+00:55:43,733 --> 00:55:45,899
+we need to use the signing key
+
+1136
+00:55:46,133 --> 00:55:50,099
+so I will hear just let coca this one
+
+1137
+00:55:50,366 --> 00:55:54,566
+get signing key and I will explain it later on
+
+1138
+00:55:54,900 --> 00:55:56,333
+we will implement this method
+
+1139
+00:55:56,400 --> 00:55:59,100
+and then we need to build because it's a builder
+
+1140
+00:55:59,166 --> 00:56:01,666
+and once the object is build
+
+1141
+00:56:01,700 --> 00:56:06,800
+we can call the method pass claims JWS
+
+1142
+00:56:06,800 --> 00:56:08,900
+okay so this one
+
+1143
+00:56:09,400 --> 00:56:12,000
+this method pass claims JWS
+
+1144
+00:56:12,066 --> 00:56:14,366
+so we want to pass our token
+
+1145
+00:56:14,666 --> 00:56:17,099
+and once the token is passed
+
+1146
+00:56:17,100 --> 00:56:19,866
+we can call the method get body
+
+1147
+00:56:19,900 --> 00:56:22,366
+okay so within the get body we can
+
+1148
+00:56:22,866 --> 00:56:25,566
+get all the claims that we have within this
+
+1149
+00:56:25,566 --> 00:56:26,866
+this token right here
+
+1150
+00:56:26,866 --> 00:56:28,533
+alright so now
+
+1151
+00:56:37,300 --> 00:56:37,866
+now
+
+1152
+00:56:37,866 --> 00:56:41,566
+before we implement this signing key method we should
+
+1153
+00:56:41,700 --> 00:56:45,566
+return a key as you can see in the definition here
+
+1154
+00:56:45,566 --> 00:56:46,499
+so this one
+
+1155
+00:56:47,600 --> 00:56:50,800
+let's 1st understand what is a signing key
+
+1156
+00:56:50,900 --> 00:56:55,100
+okay so in the context of chase on web tokens
+
+1157
+00:56:55,266 --> 00:56:59,266
+a signing key is a secret that is used to digitally
+
+1158
+00:56:59,300 --> 00:57:01,300
+sign the JWT
+
+1159
+00:57:01,533 --> 00:57:04,566
+the signing key is used to create the signature
+
+1160
+00:57:04,566 --> 00:57:06,133
+part of the JWT
+
+1161
+00:57:06,500 --> 00:57:11,400
+which is used to verify that the sender of the JWT
+
+1162
+00:57:11,400 --> 00:57:13,300
+is who it claims to be
+
+1163
+00:57:13,500 --> 00:57:15,566
+and ensure that the message
+
+1164
+00:57:15,566 --> 00:57:17,666
+wasn't changed along the way
+
+1165
+00:57:17,933 --> 00:57:21,099
+so we want to ensure that the same person
+
+1166
+00:57:21,100 --> 00:57:22,366
+or the same client
+
+1167
+00:57:22,533 --> 00:57:25,266
+that is sending this JWT key
+
+1168
+00:57:25,733 --> 00:57:28,133
+is the one that claims who to be
+
+1169
+00:57:28,166 --> 00:57:29,366
+okay so
+
+1170
+00:57:29,366 --> 00:57:32,699
+the signing key is used in conjunction with
+
+1171
+00:57:32,700 --> 00:57:34,200
+the signing algorithm
+
+1172
+00:57:34,466 --> 00:57:38,266
+specified in the JWT header to create the signature
+
+1173
+00:57:38,666 --> 00:57:40,966
+the specific sign in algorithm
+
+1174
+00:57:41,300 --> 00:57:43,266
+and key size would depend
+
+1175
+00:57:43,266 --> 00:57:46,366
+on the security requirement of your application
+
+1176
+00:57:46,366 --> 00:57:48,066
+and the level of trust
+
+1177
+00:57:48,100 --> 00:57:50,300
+you have in the signing party
+
+1178
+00:57:50,300 --> 00:57:51,600
+okay so
+
+1179
+00:57:51,933 --> 00:57:53,466
+here in order to do that
+
+1180
+00:57:53,466 --> 00:57:57,799
+1st of all we need to go ahead and generate a new
+
+1181
+00:57:58,000 --> 00:58:02,000
+token or a new signing key or a secret secret key
+
+1182
+00:58:03,166 --> 00:58:07,199
+so to generate this secret key we can do it online
+
+1183
+00:58:07,200 --> 00:58:08,300
+because now
+
+1184
+00:58:09,200 --> 00:58:13,266
+for security reasons we need at least or the minimum
+
+1185
+00:58:13,533 --> 00:58:16,366
+a signing key of size 250
+
+1186
+00:58:17,100 --> 00:58:18,766
+6 okay so
+
+1187
+00:58:18,766 --> 00:58:21,866
+and in order to generate a key so
+
+1188
+00:58:21,933 --> 00:58:23,566
+you don't need to worry about this
+
+1189
+00:58:23,566 --> 00:58:27,366
+there are so many tools and online tools to do this
+
+1190
+00:58:27,666 --> 00:58:32,466
+so here I will just go ahead and create a private
+
+1191
+00:58:34,066 --> 00:58:35,866
+static final
+
+1192
+00:58:36,566 --> 00:58:39,299
+string I will call that secret key
+
+1193
+00:58:41,566 --> 00:58:44,399
+and this secret key equals the value that I will
+
+1194
+00:58:44,400 --> 00:58:45,533
+generate right now
+
+1195
+00:58:45,533 --> 00:58:48,099
+okay so now go to the browser
+
+1196
+00:58:48,666 --> 00:58:52,599
+and navigate to this address which is all keys
+
+1197
+00:58:52,600 --> 00:58:54,466
+generator com and then
+
+1198
+00:58:54,666 --> 00:58:55,466
+random
+
+1199
+00:58:56,100 --> 00:58:59,000
+security incorruption key generator a
+
+1200
+00:59:00,100 --> 00:59:04,133
+SPX okay and we have here encryption keys
+
+1201
+00:59:04,333 --> 00:59:06,799
+and here we have also the security level
+
+1202
+00:59:06,800 --> 00:59:07,933
+so as I mentioned
+
+1203
+00:59:08,066 --> 00:59:13,733
+the minimum required for JWT tokens is 256 pit
+
+1204
+00:59:13,800 --> 00:59:17,500
+okay and then click on this checkbox
+
+1205
+00:59:17,700 --> 00:59:19,533
+yes that the X
+
+1206
+00:59:19,866 --> 00:59:21,999
+make it check it and make it yes
+
+1207
+00:59:22,200 --> 00:59:24,700
+so we can get this X
+
+1208
+00:59:25,466 --> 00:59:26,966
+X secret key okay
+
+1209
+00:59:27,166 --> 00:59:30,499
+so if you need more security just go ahead
+
+1210
+00:59:30,500 --> 00:59:32,733
+change it and do like
+
+1211
+00:59:32,933 --> 00:59:34,699
+you can go even up to
+
+1212
+00:59:36,266 --> 00:59:39,599
+496 bits okay but for now for the sake of this
+
+1213
+00:59:39,900 --> 00:59:42,766
+tutorial I will just make it or leave it to
+
+1214
+00:59:43,066 --> 00:59:44,966
+256 bit
+
+1215
+00:59:45,133 --> 00:59:48,899
+okay now let's go back to our code and paste
+
+1216
+00:59:49,533 --> 00:59:52,133
+this code right here or this key right here
+
+1217
+00:59:52,366 --> 00:59:55,799
+also you can move it to the application properties
+
+1218
+00:59:56,566 --> 00:59:58,166
+and use it from there
+
+1219
+00:59:58,166 --> 00:59:59,999
+alright now let's continue
+
+1220
+01:00:00,266 --> 01:00:02,999
+and let's implement this get signing key
+
+1221
+01:00:03,800 --> 01:00:06,766
+so here I will use antiligate to auto
+
+1222
+01:00:06,766 --> 01:00:09,066
+generate or to create this method
+
+1223
+01:00:09,200 --> 01:00:11,500
+so I will ask how to create this method
+
+1224
+01:00:11,500 --> 01:00:14,166
+and this method should return not bite
+
+1225
+01:00:14,166 --> 01:00:15,866
+but it should return a key
+
+1226
+01:00:16,066 --> 01:00:17,366
+okay so
+
+1227
+01:00:18,100 --> 01:00:19,733
+now to do this
+
+1228
+01:00:19,733 --> 01:00:24,166
+1st of all I need to create or to make an object
+
+1229
+01:00:24,533 --> 01:00:26,533
+or variable of type byte
+
+1230
+01:00:26,533 --> 01:00:28,299
+I will call it key byte
+
+1231
+01:00:29,766 --> 01:00:32,699
+and this one equals decoders
+
+1232
+01:00:33,066 --> 01:00:34,866
+and the dot
+
+1233
+01:00:36,000 --> 01:00:37,900
+base 64
+
+1234
+01:00:37,900 --> 01:00:41,766
+because it's a base we want to decode it on base 64
+
+1235
+01:00:42,100 --> 01:00:46,766
+dot decode and we want to decode our secret key
+
+1236
+01:00:47,166 --> 01:00:51,466
+okay so once the secret key is decoded now
+
+1237
+01:00:52,066 --> 01:00:54,999
+I need to do just to return keys
+
+1238
+01:00:55,666 --> 01:00:56,466
+dot
+
+1239
+01:00:57,366 --> 01:01:00,199
+HMAC shah key 4
+
+1240
+01:01:00,566 --> 01:01:03,899
+this is one of the algorithms that we mentioned before
+
+1241
+01:01:04,566 --> 01:01:07,899
+and all I need to do is to pass these key bites
+
+1242
+01:01:08,466 --> 01:01:12,299
+right so now we have our gate tiny key method
+
+1243
+01:01:12,466 --> 01:01:14,466
+and we have also this
+
+1244
+01:01:14,466 --> 01:01:17,766
+extract all claims method ready to use
+
+1245
+01:01:27,566 --> 01:01:31,533
+now we have extract all claims method ready to use
+
+1246
+01:01:31,966 --> 01:01:35,333
+I will go ahead next and implement another method
+
+1247
+01:01:35,333 --> 01:01:36,766
+which will allow me
+
+1248
+01:01:36,766 --> 01:01:39,066
+or which can extract
+
+1249
+01:01:39,366 --> 01:01:41,399
+a single claim that we pass
+
+1250
+01:01:41,466 --> 01:01:45,133
+okay so I will use generosity for this
+
+1251
+01:01:45,133 --> 01:01:47,599
+so I will use a public t
+
+1252
+01:01:47,766 --> 01:01:49,699
+I wanted to be a generic method
+
+1253
+01:01:49,900 --> 01:01:52,566
+now they will call it extract claim
+
+1254
+01:01:53,133 --> 01:01:56,299
+and for this claim I need of course the token
+
+1255
+01:01:56,466 --> 01:01:58,966
+the key token or string token
+
+1256
+01:01:59,166 --> 01:02:02,299
+and then I want to pass a function
+
+1257
+01:02:02,900 --> 01:02:04,900
+the one from java utils
+
+1258
+01:02:04,900 --> 01:02:07,400
+and this function is of type claims
+
+1259
+01:02:07,766 --> 01:02:11,399
+and t which is the type that I want to return
+
+1260
+01:02:11,400 --> 01:02:14,500
+okay I will call it claim resolver
+
+1261
+01:02:14,566 --> 01:02:16,899
+or claims resolver or claim
+
+1262
+01:02:16,900 --> 01:02:19,466
+call it whatever I want resolver
+
+1263
+01:02:20,000 --> 01:02:23,900
+and here it's a it's a simple uh it's a simple method
+
+1264
+01:02:23,966 --> 01:02:26,866
+I will create a final claims object
+
+1265
+01:02:26,866 --> 01:02:31,133
+I will call it claims equals extract all claims
+
+1266
+01:02:31,266 --> 01:02:32,966
+from my token
+
+1267
+01:02:33,333 --> 01:02:36,399
+okay so 1st of all I want to extract all the claims
+
+1268
+01:02:36,566 --> 01:02:39,866
+and then I want to do return
+
+1269
+01:02:40,300 --> 01:02:42,100
+this claim a resolver
+
+1270
+01:02:42,100 --> 01:02:46,333
+the function that I pass as parameter dot apply
+
+1271
+01:02:46,566 --> 01:02:47,766
+and as you can see
+
+1272
+01:02:47,766 --> 01:02:51,299
+the apply it will take or it will require a claims d
+
+1273
+01:02:51,766 --> 01:02:54,199
+so the claims is the one
+
+1274
+01:02:54,200 --> 01:02:56,900
+of the list of all the claims that we have
+
+1275
+01:02:57,000 --> 01:02:57,733
+okay
+
+1276
+01:02:57,733 --> 01:03:02,099
+so this is the extract all claims all claims method
+
+1277
+01:03:02,100 --> 01:03:04,666
+now extracting any claim
+
+1278
+01:03:04,766 --> 01:03:07,999
+from my token will be an easy pizzy task
+
+1279
+01:03:08,000 --> 01:03:10,000
+so I will show you how to do that
+
+1280
+01:03:19,566 --> 01:03:21,933
+so once I have everything ready
+
+1281
+01:03:21,933 --> 01:03:24,566
+extracting all the claims and also extracting one
+
+1282
+01:03:24,566 --> 01:03:25,499
+single claim
+
+1283
+01:03:25,533 --> 01:03:26,366
+let me show you
+
+1284
+01:03:26,366 --> 01:03:30,733
+how we can extract the username out of this token
+
+1285
+01:03:30,733 --> 01:03:34,533
+okay so extracting a username is easy PZ
+
+1286
+01:03:34,700 --> 01:03:37,866
+so it will be extract claim
+
+1287
+01:03:38,066 --> 01:03:40,399
+and we need to pass the token
+
+1288
+01:03:40,400 --> 01:03:43,533
+and only we need to pass the claims
+
+1289
+01:03:44,333 --> 01:03:45,766
+dot get subject
+
+1290
+01:03:45,900 --> 01:03:48,466
+okay so because as I mentioned before
+
+1291
+01:03:48,666 --> 01:03:50,266
+the subject is
+
+1292
+01:03:50,366 --> 01:03:53,533
+or should be the email or the username of
+
+1293
+01:03:53,966 --> 01:03:55,199
+of my user
+
+1294
+01:03:55,200 --> 01:03:58,466
+okay so this should be the subject of the token
+
+1295
+01:03:58,533 --> 01:03:59,499
+so that's it
+
+1296
+01:03:59,500 --> 01:04:02,500
+this is only all about extracting the username
+
+1297
+01:04:03,166 --> 01:04:06,733
+let's now move on and try to implement other methods
+
+1298
+01:04:06,966 --> 01:04:10,499
+that we will need within this JWT service class
+
+1299
+01:04:10,500 --> 01:04:14,133
+like testing if the token is expired also
+
+1300
+01:04:15,300 --> 01:04:17,166
+extracting the expiration date
+
+1301
+01:04:17,166 --> 01:04:19,499
+generating the token and so on so forth
+
+1302
+01:04:27,066 --> 01:04:29,533
+let s now implement the method that will
+
+1303
+01:04:29,533 --> 01:04:31,399
+help us generate a token
+
+1304
+01:04:31,400 --> 01:04:33,500
+so the token as you know is a string
+
+1305
+01:04:33,500 --> 01:04:35,300
+so I will create a public
+
+1306
+01:04:35,733 --> 01:04:37,266
+string method
+
+1307
+01:04:38,200 --> 01:04:41,200
+and I will call it generate token
+
+1308
+01:04:42,933 --> 01:04:46,099
+alright so this generate token
+
+1309
+01:04:46,733 --> 01:04:49,566
+will take us parameter a map
+
+1310
+01:04:51,733 --> 01:04:54,166
+a map of string and object
+
+1311
+01:04:54,166 --> 01:04:57,166
+okay and this map of string object will
+
+1312
+01:04:57,200 --> 01:05:00,500
+will contain the claims or the extra claims
+
+1313
+01:05:00,500 --> 01:05:02,766
+that we want that we want to add
+
+1314
+01:05:02,766 --> 01:05:06,166
+okay I will call it claims or like extra claims
+
+1315
+01:05:06,166 --> 01:05:08,266
+I think it's better to call it extra
+
+1316
+01:05:08,933 --> 01:05:14,799
+claims and also I want to pass my user details
+
+1317
+01:05:14,900 --> 01:05:17,266
+so here user details
+
+1318
+01:05:17,466 --> 01:05:19,766
+and it's the one from the spring framework
+
+1319
+01:05:20,866 --> 01:05:23,099
+I will just call it user or user details
+
+1320
+01:05:23,866 --> 01:05:27,533
+alright so this is the method and here
+
+1321
+01:05:27,600 --> 01:05:31,100
+this extra claims is the one if I want for example
+
+1322
+01:05:31,300 --> 01:05:33,166
+I don't know to pass authorities
+
+1323
+01:05:33,166 --> 01:05:36,099
+to pass any information that I want to store within
+
+1324
+01:05:36,100 --> 01:05:37,366
+my token right
+
+1325
+01:05:37,466 --> 01:05:42,766
+so to do this it's easy easy it's just return JWTS
+
+1326
+01:05:44,700 --> 01:05:46,100
+dot builder
+
+1327
+01:05:47,800 --> 01:05:50,000
+and then I want to set
+
+1328
+01:05:50,466 --> 01:05:51,599
+my claims
+
+1329
+01:05:52,466 --> 01:05:54,566
+so this are my claims
+
+1330
+01:05:55,600 --> 01:05:59,400
+and those will be the extra claims okay
+
+1331
+01:06:01,100 --> 01:06:02,600
+so extra claims
+
+1332
+01:06:03,066 --> 01:06:06,299
+and after passing the claims I need to set my subject
+
+1333
+01:06:08,333 --> 01:06:10,599
+so the subject as I mentioned before
+
+1334
+01:06:10,766 --> 01:06:14,166
+it should be my username or user email
+
+1335
+01:06:14,166 --> 01:06:17,199
+okay so I will use the object user details
+
+1336
+01:06:17,866 --> 01:06:20,099
+that get username
+
+1337
+01:06:20,300 --> 01:06:23,900
+alright so because for us username or the unique
+
+1338
+01:06:24,100 --> 01:06:26,066
+part of the user is the emaid
+
+1339
+01:06:26,066 --> 01:06:28,766
+but for spring it's always called username
+
+1340
+01:06:28,766 --> 01:06:30,599
+that's why we are using username
+
+1341
+01:06:30,700 --> 01:06:35,166
+okay so also we need to set the issued art
+
+1342
+01:06:35,266 --> 01:06:38,599
+means that when this claim was created
+
+1343
+01:06:38,733 --> 01:06:40,999
+and this information will help us
+
+1344
+01:06:41,300 --> 01:06:43,700
+to calculate the expiration date
+
+1345
+01:06:43,700 --> 01:06:46,566
+or to check if the token is still valid or not
+
+1346
+01:06:46,933 --> 01:06:51,199
+okay so I will use a new date right here
+
+1347
+01:06:51,200 --> 01:06:53,900
+and I will pass just the system
+
+1348
+01:06:54,100 --> 01:06:57,533
+dot current milliseconds okay
+
+1349
+01:06:59,733 --> 01:07:00,866
+so this is
+
+1350
+01:07:01,566 --> 01:07:03,466
+the issue the issue date
+
+1351
+01:07:03,566 --> 01:07:07,199
+and it will also to set the expiration date
+
+1352
+01:07:08,066 --> 01:07:11,699
+so the expiration date it will be the same new date
+
+1353
+01:07:11,800 --> 01:07:15,133
+and here like it's up to you to set how long
+
+1354
+01:07:15,533 --> 01:07:17,266
+this token should be valid
+
+1355
+01:07:17,266 --> 01:07:20,366
+okay so also system dot
+
+1356
+01:07:21,333 --> 01:07:24,199
+get dot current milliseconds
+
+1357
+01:07:27,766 --> 01:07:30,966
+and then for example I want to add
+
+1358
+01:07:31,500 --> 01:07:33,266
+let's say 1000
+
+1359
+01:07:35,566 --> 01:07:40,299
+times 60 which is 60 minutes times to 24
+
+1360
+01:07:40,900 --> 01:07:44,500
+so my token for example will be will be valid for
+
+1361
+01:07:45,400 --> 01:07:48,933
+24 hours plus 1000 milliseconds
+
+1362
+01:07:48,933 --> 01:07:50,266
+okay and then you can
+
+1363
+01:07:50,266 --> 01:07:51,133
+you can decide
+
+1364
+01:07:51,133 --> 01:07:54,499
+or you can set any expiration date that suits you
+
+1365
+01:07:54,533 --> 01:07:55,333
+okay
+
+1366
+01:07:55,666 --> 01:07:58,799
+the final step is to sign with
+
+1367
+01:07:59,066 --> 01:08:03,566
+like which key that we want to use to sign this token
+
+1368
+01:08:03,800 --> 01:08:05,266
+and the signing key
+
+1369
+01:08:05,266 --> 01:08:07,999
+is the get signing key method that we
+
+1370
+01:08:08,000 --> 01:08:09,266
+already created before
+
+1371
+01:08:09,766 --> 01:08:13,566
+and then we need to pass also the signature algorita
+
+1372
+01:08:15,266 --> 01:08:19,333
+so signature algorithm and then we want to use the
+
+1373
+01:08:20,166 --> 01:08:23,599
+HS256 okay so to this one
+
+1374
+01:08:24,000 --> 01:08:26,100
+so let's select it and then
+
+1375
+01:08:26,300 --> 01:08:28,933
+finally call the method compact
+
+1376
+01:08:29,400 --> 01:08:32,333
+compact is the one that will generate and return
+
+1377
+01:08:32,333 --> 01:08:34,333
+the token so as you can see
+
+1378
+01:08:34,333 --> 01:08:38,166
+this is how we can generate a token out of
+
+1379
+01:08:38,500 --> 01:08:40,400
+extra claims and the user details
+
+1380
+01:08:40,400 --> 01:08:41,566
+all right so
+
+1381
+01:08:42,333 --> 01:08:44,566
+now this method will
+
+1382
+01:08:45,900 --> 01:08:47,466
+like we don't have a choice
+
+1383
+01:08:47,466 --> 01:08:50,366
+but passing claims and user details
+
+1384
+01:08:50,400 --> 01:08:53,966
+but what if I want to pass or I want to use
+
+1385
+01:08:54,733 --> 01:08:56,366
+or I want to generate a token
+
+1386
+01:08:56,366 --> 01:08:58,466
+without having or without extra claims
+
+1387
+01:08:58,466 --> 01:08:59,799
+I only I only want
+
+1388
+01:08:59,800 --> 01:09:03,000
+to generate a token from the user details itself
+
+1389
+01:09:03,133 --> 01:09:05,333
+so it's easy busy I will create
+
+1390
+01:09:07,900 --> 01:09:08,900
+another one
+
+1391
+01:09:10,566 --> 01:09:12,666
+public string
+
+1392
+01:09:13,666 --> 01:09:16,999
+I'll give it the same name generate token
+
+1393
+01:09:17,200 --> 01:09:19,500
+and the generate token it will take it
+
+1394
+01:09:19,500 --> 01:09:22,166
+I will pass only user details
+
+1395
+01:09:22,666 --> 01:09:24,199
+as a parameter
+
+1396
+01:09:26,000 --> 01:09:30,266
+and here I will just return generate token
+
+1397
+01:09:30,766 --> 01:09:33,066
+out of null or let's say
+
+1398
+01:09:33,266 --> 01:09:36,599
+a new hash map like an empty one
+
+1399
+01:09:37,066 --> 01:09:38,899
+and then user details
+
+1400
+01:09:42,200 --> 01:09:46,000
+okay so now I have this generate token method
+
+1401
+01:09:46,166 --> 01:09:47,599
+that I can use
+
+1402
+01:09:48,000 --> 01:09:49,333
+later on okay
+
+1403
+01:09:57,466 --> 01:10:01,266
+as a next step let s implement a method that
+
+1404
+01:10:01,333 --> 01:10:04,466
+will validate or can validate a token
+
+1405
+01:10:04,533 --> 01:10:05,733
+okay so
+
+1406
+01:10:07,166 --> 01:10:08,666
+are we create a bullion
+
+1407
+01:10:10,333 --> 01:10:13,799
+and I will call it is token valid
+
+1408
+01:10:14,300 --> 01:10:15,133
+alright and
+
+1409
+01:10:15,933 --> 01:10:17,733
+this method is token valid
+
+1410
+01:10:17,866 --> 01:10:20,066
+will take 2 parameters as
+
+1411
+01:10:20,166 --> 01:10:23,199
+input which is the token itself
+
+1412
+01:10:24,266 --> 01:10:25,866
+and the user details
+
+1413
+01:10:25,866 --> 01:10:27,733
+why we need user details
+
+1414
+01:10:28,133 --> 01:10:31,533
+because we want to validate if this
+
+1415
+01:10:31,700 --> 01:10:32,966
+token right here
+
+1416
+01:10:32,966 --> 01:10:35,499
+belongs to these user details right here
+
+1417
+01:10:35,500 --> 01:10:39,266
+okay so 1st of all I need a final
+
+1418
+01:10:39,566 --> 01:10:42,466
+string username or user email
+
+1419
+01:10:42,466 --> 01:10:45,999
+but within this within the context of this JWT service
+
+1420
+01:10:46,200 --> 01:10:47,933
+let's stick to username
+
+1421
+01:10:48,066 --> 01:10:49,699
+and this one it would be
+
+1422
+01:10:49,700 --> 01:10:51,900
+extract username out of the token
+
+1423
+01:10:51,900 --> 01:10:53,666
+we already have the method for that
+
+1424
+01:10:54,133 --> 01:10:58,366
+and then then what we want to do is to return
+
+1425
+01:10:59,366 --> 01:11:03,699
+if or whether the username that we have right here
+
+1426
+01:11:03,966 --> 01:11:05,099
+equals
+
+1427
+01:11:05,866 --> 01:11:07,933
+the user detains dot
+
+1428
+01:11:08,900 --> 01:11:10,733
+get username alright
+
+1429
+01:11:10,733 --> 01:11:12,766
+so we want to make sure that the username
+
+1430
+01:11:12,766 --> 01:11:14,266
+we have within the token
+
+1431
+01:11:14,333 --> 01:11:17,766
+is the same as the username we have as input
+
+1432
+01:11:17,800 --> 01:11:24,300
+okay and I want to make sure is is token expired
+
+1433
+01:11:24,966 --> 01:11:28,566
+like I need to check that my token is not expired
+
+1434
+01:11:28,566 --> 01:11:32,166
+okay and I want to pass my token as parameter
+
+1435
+01:11:32,333 --> 01:11:34,466
+so this is token expired
+
+1436
+01:11:34,466 --> 01:11:36,599
+this method that we need to create
+
+1437
+01:11:36,766 --> 01:11:40,299
+so let me go ahead and create this token expired
+
+1438
+01:11:41,466 --> 01:11:44,266
+and let's implement this token
+
+1439
+01:11:44,266 --> 01:11:45,599
+okay so
+
+1440
+01:11:47,166 --> 01:11:51,399
+I want for this is token expired I want
+
+1441
+01:11:51,600 --> 01:11:52,966
+I will create a method
+
+1442
+01:11:52,966 --> 01:11:55,599
+I would call it extract expiration
+
+1443
+01:11:57,900 --> 01:11:59,900
+from the token that we have
+
+1444
+01:12:00,766 --> 01:12:03,733
+dot before because it's a date
+
+1445
+01:12:03,733 --> 01:12:06,499
+so I want to make sure that it's before
+
+1446
+01:12:07,066 --> 01:12:08,299
+today's date okay
+
+1447
+01:12:08,300 --> 01:12:09,566
+before new date
+
+1448
+01:12:10,133 --> 01:12:14,733
+now let's create this extract expiration
+
+1449
+01:12:16,600 --> 01:12:19,600
+so this extract expiration should return a date
+
+1450
+01:12:19,733 --> 01:12:22,799
+and it has or it passes as a parameter
+
+1451
+01:12:23,100 --> 01:12:26,200
+the token itself so it's also easy
+
+1452
+01:12:26,200 --> 01:12:29,366
+so it's extract claim from the token
+
+1453
+01:12:30,200 --> 01:12:32,733
+and then it claims
+
+1454
+01:12:33,866 --> 01:12:36,533
+or colon colon get expiration
+
+1455
+01:12:37,100 --> 01:12:42,266
+okay so this is how we can extract the expiration date
+
+1456
+01:12:42,466 --> 01:12:44,599
+alright so we have here if
+
+1457
+01:12:45,200 --> 01:12:48,900
+the east token expired we have the east token valid
+
+1458
+01:12:49,266 --> 01:12:52,333
+we have all the methods that we need
+
+1459
+01:12:52,333 --> 01:12:55,199
+so is to converted this one we'll use it later on
+
+1460
+01:12:55,300 --> 01:12:57,466
+so now let's move on and go back
+
+1461
+01:12:57,466 --> 01:12:59,333
+finish implementing this
+
+1462
+01:12:59,533 --> 01:13:00,866
+authontication filter
+
+1463
+01:13:10,900 --> 01:13:14,066
+so here we just finished implementing this
+
+1464
+01:13:14,166 --> 01:13:17,899
+JWT validation process or validation service
+
+1465
+01:13:17,900 --> 01:13:18,766
+right here
+
+1466
+01:13:19,166 --> 01:13:23,566
+and now we want to go back to this validate JWT process
+
+1467
+01:13:23,766 --> 01:13:25,466
+so within our code
+
+1468
+01:13:25,466 --> 01:13:29,666
+what we did here we extracted our username
+
+1469
+01:13:29,666 --> 01:13:31,966
+so we have now our username valid
+
+1470
+01:13:31,966 --> 01:13:35,133
+let's go ahead and perform or finish
+
+1471
+01:13:35,533 --> 01:13:37,333
+our validation process
+
+1472
+01:13:37,333 --> 01:13:42,166
+alright so here I want to check if my user email
+
+1473
+01:13:42,766 --> 01:13:43,933
+is not null
+
+1474
+01:13:44,100 --> 01:13:48,800
+so I have user email or I can extract my user email out
+
+1475
+01:13:48,966 --> 01:13:51,099
+of my JWT token
+
+1476
+01:13:51,600 --> 01:13:53,966
+and I want to check something else
+
+1477
+01:13:53,966 --> 01:13:57,899
+I want to check that the user is not authenticated yet
+
+1478
+01:13:58,066 --> 01:14:00,266
+because if the user is authenticated
+
+1479
+01:14:00,266 --> 01:14:02,566
+I don't need to perform again
+
+1480
+01:14:03,100 --> 01:14:05,766
+all the checks and setting or and updating
+
+1481
+01:14:05,900 --> 01:14:08,300
+the security context and so on so forth
+
+1482
+01:14:08,333 --> 01:14:10,933
+so here I want to check if the user is
+
+1483
+01:14:10,933 --> 01:14:11,899
+already authenticated
+
+1484
+01:14:11,900 --> 01:14:16,100
+I don't need to do all this process and so on so forth
+
+1485
+01:14:16,100 --> 01:14:19,166
+all I need to do is pass here and
+
+1486
+01:14:19,466 --> 01:14:21,199
+leave it to the dispatcher servelet
+
+1487
+01:14:21,200 --> 01:14:22,500
+okay so
+
+1488
+01:14:22,500 --> 01:14:24,800
+to do that or to check if the user is
+
+1489
+01:14:24,800 --> 01:14:26,100
+already connected or is
+
+1490
+01:14:26,100 --> 01:14:27,733
+already authenticated or not
+
+1491
+01:14:28,366 --> 01:14:31,733
+we have an object called security context holder
+
+1492
+01:14:35,100 --> 01:14:37,966
+and from that we can get the context
+
+1493
+01:14:37,966 --> 01:14:42,066
+and then we have a method called get authentication
+
+1494
+01:14:42,200 --> 01:14:44,900
+and when the authentication is
+
+1495
+01:14:44,966 --> 01:14:49,299
+now means that the user is not yet authenticated
+
+1496
+01:14:49,300 --> 01:14:53,100
+okay so this means that the user is not connected yet
+
+1497
+01:14:54,166 --> 01:14:57,733
+alright so once the user is not connected
+
+1498
+01:14:57,733 --> 01:14:59,733
+what we need to do here
+
+1499
+01:15:00,166 --> 01:15:02,933
+like when we go back to follow this process
+
+1500
+01:15:03,100 --> 01:15:04,700
+we need to perform
+
+1501
+01:15:04,700 --> 01:15:08,400
+and to check or get the user from the database
+
+1502
+01:15:08,466 --> 01:15:11,766
+alright so once we do this validation process we want
+
+1503
+01:15:11,866 --> 01:15:13,299
+also or we need to
+
+1504
+01:15:13,466 --> 01:15:16,766
+check if we have the user within the database
+
+1505
+01:15:16,966 --> 01:15:17,733
+alright
+
+1506
+01:15:17,733 --> 01:15:22,133
+so to do so I will create an object called user details
+
+1507
+01:15:22,133 --> 01:15:24,066
+or you can just call it user
+
+1508
+01:15:24,200 --> 01:15:25,733
+because our user already
+
+1509
+01:15:26,166 --> 01:15:29,933
+extends or implements the user details interface
+
+1510
+01:15:30,166 --> 01:15:33,766
+I will call it user details equals
+
+1511
+01:15:34,300 --> 01:15:38,366
+and here I will use this dot user
+
+1512
+01:15:38,600 --> 01:15:42,166
+details service which we don't have yet
+
+1513
+01:15:42,700 --> 01:15:48,800
+and here we have a method load by user username
+
+1514
+01:15:49,133 --> 01:15:49,366
+okay
+
+1515
+01:15:49,366 --> 01:15:52,999
+and you and my username in this case is the user email
+
+1516
+01:15:53,566 --> 01:15:54,366
+alright
+
+1517
+01:15:56,400 --> 01:16:00,933
+so here the method called load user by username
+
+1518
+01:16:01,300 --> 01:16:04,666
+and in this case we don't have this user detailed
+
+1519
+01:16:04,666 --> 01:16:08,133
+service but let's create one here
+
+1520
+01:16:13,966 --> 01:16:17,399
+so this user detailed service is already an interface
+
+1521
+01:16:17,766 --> 01:16:19,499
+within the spring
+
+1522
+01:16:20,166 --> 01:16:21,999
+available within the spring framework
+
+1523
+01:16:22,000 --> 01:16:22,900
+and it's from
+
+1524
+01:16:22,900 --> 01:16:25,733
+spring framework security core and so on so forth
+
+1525
+01:16:26,166 --> 01:16:29,066
+and I will call it user details service
+
+1526
+01:16:29,100 --> 01:16:32,400
+so this interface if we check it right here
+
+1527
+01:16:35,100 --> 01:16:38,700
+so here we have some implementation for it
+
+1528
+01:16:38,700 --> 01:16:42,400
+okay but we want our own implementation
+
+1529
+01:16:42,733 --> 01:16:47,299
+because we want to fetch our user from our database
+
+1530
+01:16:47,300 --> 01:16:50,266
+alright so make this one final don't forget this
+
+1531
+01:16:50,733 --> 01:16:51,966
+and let's move on
+
+1532
+01:16:51,966 --> 01:16:56,099
+and implement or provide a bean of type user details
+
+1533
+01:16:56,100 --> 01:16:56,900
+service
+
+1534
+01:17:05,000 --> 01:17:05,966
+at this level
+
+1535
+01:17:05,966 --> 01:17:10,733
+we need to create a beam of type user details service
+
+1536
+01:17:10,733 --> 01:17:14,499
+or we need to create a class that implements this
+
+1537
+01:17:15,066 --> 01:17:16,666
+interface so
+
+1538
+01:17:16,666 --> 01:17:20,099
+and also give it the service or component annotation
+
+1539
+01:17:20,100 --> 01:17:22,200
+so it becomes a managed bean
+
+1540
+01:17:22,466 --> 01:17:24,799
+and spring will be able to inject it
+
+1541
+01:17:24,933 --> 01:17:27,166
+but let's do it in a fancy way
+
+1542
+01:17:27,300 --> 01:17:30,933
+within this config package I will create a class
+
+1543
+01:17:30,933 --> 01:17:33,266
+I will call it application config
+
+1544
+01:17:34,966 --> 01:17:36,933
+so this application config
+
+1545
+01:17:37,100 --> 01:17:39,666
+will hold all the application configurations
+
+1546
+01:17:39,666 --> 01:17:42,066
+such as beans and so on so forth
+
+1547
+01:17:42,300 --> 01:17:45,866
+alright so to make this class a configuration
+
+1548
+01:17:45,866 --> 01:17:47,599
+we need to unnotated
+
+1549
+01:17:47,600 --> 01:17:49,900
+with the annotation called configuration
+
+1550
+01:17:49,900 --> 01:17:53,533
+so at the startup spring will pick up this class
+
+1551
+01:17:53,700 --> 01:17:56,133
+and try to implement and inject
+
+1552
+01:17:56,133 --> 01:17:58,166
+all the beans that will declare within
+
+1553
+01:17:58,166 --> 01:17:59,566
+this application config
+
+1554
+01:17:59,766 --> 01:18:01,866
+alright we also need the
+
+1555
+01:18:01,866 --> 01:18:04,799
+required artist constructor in case we want to inject
+
+1556
+01:18:04,800 --> 01:18:05,600
+something
+
+1557
+01:18:06,300 --> 01:18:08,200
+so what we need to do now
+
+1558
+01:18:08,200 --> 01:18:10,900
+is to implement or to create a beam
+
+1559
+01:18:10,900 --> 01:18:13,400
+of type user details service
+
+1560
+01:18:13,400 --> 01:18:14,400
+and to do so
+
+1561
+01:18:14,866 --> 01:18:17,366
+1st of all we need to use the annotation bean
+
+1562
+01:18:17,566 --> 01:18:18,899
+this to indicate
+
+1563
+01:18:18,900 --> 01:18:22,466
+to spring that this method represents a bean
+
+1564
+01:18:22,733 --> 01:18:26,799
+and a bean always should be public no private beans
+
+1565
+01:18:27,533 --> 01:18:30,366
+and our being is of type user details
+
+1566
+01:18:31,000 --> 01:18:32,133
+service okay
+
+1567
+01:18:32,300 --> 01:18:33,100
+so
+
+1568
+01:18:33,533 --> 01:18:36,199
+let's call it the user details service
+
+1569
+01:18:36,266 --> 01:18:39,133
+as easy as that or as simple as that
+
+1570
+01:18:39,333 --> 01:18:40,366
+and then
+
+1571
+01:18:41,300 --> 01:18:43,366
+we can use alumnida expression
+
+1572
+01:18:43,366 --> 01:18:44,299
+so we can use
+
+1573
+01:18:44,300 --> 01:18:48,000
+or we can say return a new user detailed service
+
+1574
+01:18:48,266 --> 01:18:50,066
+and we implement the load
+
+1575
+01:18:50,533 --> 01:18:52,166
+user by username
+
+1576
+01:18:52,866 --> 01:18:54,899
+so we can do like that
+
+1577
+01:18:56,200 --> 01:19:00,200
+new user details service
+
+1578
+01:19:01,000 --> 01:19:03,066
+like this and automatically
+
+1579
+01:19:03,166 --> 01:19:05,499
+you'll see here that we have this
+
+1580
+01:19:05,666 --> 01:19:09,333
+load user by username method the one that we
+
+1581
+01:19:09,500 --> 01:19:11,133
+want to use in here
+
+1582
+01:19:15,266 --> 01:19:16,933
+this method right here
+
+1583
+01:19:16,933 --> 01:19:18,599
+okay but
+
+1584
+01:19:18,766 --> 01:19:22,699
+but we can make it more simple than that
+
+1585
+01:19:22,700 --> 01:19:25,300
+and we can use a lambda expression
+
+1586
+01:19:25,366 --> 01:19:27,199
+and the lambda expression it's
+
+1587
+01:19:27,366 --> 01:19:30,533
+it looks like that so here we already see that
+
+1588
+01:19:31,000 --> 01:19:34,000
+antilly J is proposing to replace this with a lambda
+
+1589
+01:19:34,100 --> 01:19:36,400
+so we'll just go ahead and click on it
+
+1590
+01:19:37,400 --> 01:19:39,366
+so the lambda is the username
+
+1591
+01:19:39,366 --> 01:19:42,933
+so we provide the username the one we have as an input
+
+1592
+01:19:43,266 --> 01:19:45,766
+within this method right here
+
+1593
+01:19:45,866 --> 01:19:50,099
+and then we need to provide the implementation
+
+1594
+01:19:50,100 --> 01:19:51,133
+okay so
+
+1595
+01:19:51,900 --> 01:19:54,400
+in this case what we want to do is
+
+1596
+01:19:54,866 --> 01:19:56,266
+to fetch
+
+1597
+01:19:56,400 --> 01:19:59,400
+the user or to to get the user from the database
+
+1598
+01:19:59,400 --> 01:20:04,366
+and to do that we need to inject our user repository
+
+1599
+01:20:04,366 --> 01:20:09,099
+okay so let's create a private final user repository
+
+1600
+01:20:09,800 --> 01:20:12,933
+let's call it a repository or user repository
+
+1601
+01:20:13,733 --> 01:20:14,999
+and here
+
+1602
+01:20:15,200 --> 01:20:19,666
+simply what we need to return is user repository
+
+1603
+01:20:22,166 --> 01:20:26,266
+dot find by email the method that we created
+
+1604
+01:20:26,533 --> 01:20:28,099
+when we just created the
+
+1605
+01:20:28,466 --> 01:20:29,566
+user repository
+
+1606
+01:20:29,566 --> 01:20:32,399
+and find by email we need to pass the user name
+
+1607
+01:20:32,533 --> 01:20:33,333
+okay
+
+1608
+01:20:33,900 --> 01:20:38,500
+and since the find by email returns an optional of user
+
+1609
+01:20:38,500 --> 01:20:42,400
+here I want to add an RL's throw
+
+1610
+01:20:42,566 --> 01:20:45,466
+so in case we don't have or we don't find
+
+1611
+01:20:46,533 --> 01:20:49,399
+the user name or the user within our database
+
+1612
+01:20:49,400 --> 01:20:52,133
+we need to return an exception of type
+
+1613
+01:20:52,333 --> 01:20:54,266
+whether entity notefound exception
+
+1614
+01:20:54,266 --> 01:20:56,133
+or we can also return
+
+1615
+01:20:56,366 --> 01:20:59,199
+the exception username notefound exception
+
+1616
+01:20:59,200 --> 01:21:03,533
+okay so I will use the username not found exception
+
+1617
+01:21:03,733 --> 01:21:05,066
+and I will
+
+1618
+01:21:05,300 --> 01:21:09,066
+just provide here it should be also alarmed up
+
+1619
+01:21:10,733 --> 01:21:15,066
+and for example as a message we can say user not found
+
+1620
+01:21:15,866 --> 01:21:20,399
+alright so here now we have our user details service
+
+1621
+01:21:20,733 --> 01:21:22,533
+so now it's ready to use
+
+1622
+01:21:22,533 --> 01:21:24,466
+let's continue implementing our
+
+1623
+01:21:24,466 --> 01:21:26,366
+JWT authontication filter
+
+1624
+01:21:37,200 --> 01:21:39,100
+now we can go back to our filter
+
+1625
+01:21:39,100 --> 01:21:40,666
+and finish the implementation
+
+1626
+01:21:41,200 --> 01:21:41,733
+alright
+
+1627
+01:21:41,733 --> 01:21:45,066
+so here we have our user details or we have our user
+
+1628
+01:21:45,266 --> 01:21:46,866
+and the next step
+
+1629
+01:21:46,866 --> 01:21:47,999
+is to validate
+
+1630
+01:21:48,000 --> 01:21:50,500
+and check if the token is still valid or not
+
+1631
+01:21:50,866 --> 01:21:52,933
+so here I will add if
+
+1632
+01:21:53,400 --> 01:21:58,000
+JWT service dot is token valid
+
+1633
+01:21:58,066 --> 01:21:58,799
+okay
+
+1634
+01:21:58,800 --> 01:22:03,300
+and here I need to pass my JWT and the user details
+
+1635
+01:22:03,300 --> 01:22:05,866
+that I just got from the database
+
+1636
+01:22:06,266 --> 01:22:07,566
+alright so
+
+1637
+01:22:08,166 --> 01:22:10,866
+if the token is valid
+
+1638
+01:22:11,466 --> 01:22:13,533
+then what I need to do I need
+
+1639
+01:22:14,066 --> 01:22:15,699
+like we have in here
+
+1640
+01:22:15,866 --> 01:22:17,766
+we need if the user is valid
+
+1641
+01:22:17,766 --> 01:22:20,933
+we need to update the security context and
+
+1642
+01:22:21,266 --> 01:22:23,933
+send the request to our dispatcher circlet
+
+1643
+01:22:25,500 --> 01:22:28,566
+alright so once the hour token is valid
+
+1644
+01:22:28,566 --> 01:22:31,199
+I need to create an object of type
+
+1645
+01:22:31,200 --> 01:22:34,166
+username password authonication token
+
+1646
+01:22:34,400 --> 01:22:37,300
+so username password
+
+1647
+01:22:37,666 --> 01:22:39,533
+authonication token
+
+1648
+01:22:39,600 --> 01:22:41,600
+I will call it auth
+
+1649
+01:22:42,400 --> 01:22:46,500
+token and this object is needed by
+
+1650
+01:22:46,766 --> 01:22:49,466
+by spring and by the security context holder
+
+1651
+01:22:49,600 --> 01:22:53,100
+in order to update our security context
+
+1652
+01:22:53,100 --> 01:22:56,966
+okay so equals a new username and password
+
+1653
+01:22:57,866 --> 01:23:01,099
+authentication token and it takes as parameter
+
+1654
+01:23:01,600 --> 01:23:03,100
+the user details
+
+1655
+01:23:03,666 --> 01:23:06,199
+and then for the next
+
+1656
+01:23:06,500 --> 01:23:08,766
+parameter for the authorities I want
+
+1657
+01:23:08,866 --> 01:23:10,199
+to pass it as null
+
+1658
+01:23:10,466 --> 01:23:13,899
+and then the user details dot get authorities
+
+1659
+01:23:17,133 --> 01:23:17,933
+so
+
+1660
+01:23:18,200 --> 01:23:21,166
+here because we don't have credentials
+
+1661
+01:23:21,166 --> 01:23:23,266
+as you remember when we created the user
+
+1662
+01:23:23,400 --> 01:23:24,666
+we don't have credentials
+
+1663
+01:23:24,666 --> 01:23:27,166
+so that's why I'm passing these credentials as
+
+1664
+01:23:27,466 --> 01:23:28,666
+a null value
+
+1665
+01:23:30,066 --> 01:23:30,766
+so
+
+1666
+01:23:30,766 --> 01:23:31,566
+once
+
+1667
+01:23:32,000 --> 01:23:35,300
+I finish creating or finish unstantiating this user
+
+1668
+01:23:35,300 --> 01:23:36,966
+name authentication token
+
+1669
+01:23:37,166 --> 01:23:39,899
+I want also to give it some more details
+
+1670
+01:23:39,933 --> 01:23:42,366
+so I will use the oath token
+
+1671
+01:23:43,300 --> 01:23:47,066
+set details and this details it takes an object
+
+1672
+01:23:47,066 --> 01:23:50,699
+so I will pass a new object of type new
+
+1673
+01:23:51,200 --> 01:23:53,500
+web authentication details source
+
+1674
+01:23:57,733 --> 01:24:00,933
+fantication details source
+
+1675
+01:24:01,700 --> 01:24:06,500
+and here I want to build the details out of our request
+
+1676
+01:24:06,600 --> 01:24:08,900
+out of our HCTP request
+
+1677
+01:24:11,066 --> 01:24:14,333
+alright now the final step is
+
+1678
+01:24:14,566 --> 01:24:15,799
+as we mentioned here
+
+1679
+01:24:15,800 --> 01:24:16,766
+the final step
+
+1680
+01:24:16,766 --> 01:24:19,366
+is to update the security context holder
+
+1681
+01:24:19,866 --> 01:24:22,299
+so to update the security context holder
+
+1682
+01:24:22,300 --> 01:24:24,600
+its security context
+
+1683
+01:24:26,400 --> 01:24:29,000
+holder get context
+
+1684
+01:24:30,133 --> 01:24:34,499
+set authentication with our authentication token
+
+1685
+01:24:35,000 --> 01:24:37,600
+alright and that's it
+
+1686
+01:24:37,966 --> 01:24:39,533
+now let's
+
+1687
+01:24:39,933 --> 01:24:40,966
+recap this one
+
+1688
+01:24:40,966 --> 01:24:43,999
+so here when if we have our user email
+
+1689
+01:24:44,000 --> 01:24:45,766
+and the user is not autonicated
+
+1690
+01:24:46,000 --> 01:24:48,600
+we get the user details from the database
+
+1691
+01:24:48,800 --> 01:24:50,966
+and then what we need to do
+
+1692
+01:24:50,966 --> 01:24:53,166
+we check if the user is valid or not
+
+1693
+01:24:54,133 --> 01:24:56,766
+if the user and the token is valid
+
+1694
+01:24:56,766 --> 01:24:59,299
+so we create an object of type
+
+1695
+01:24:59,500 --> 01:25:01,933
+username password authentication token
+
+1696
+01:25:02,266 --> 01:25:05,866
+we pass user detains credentials and the authorities
+
+1697
+01:25:05,866 --> 01:25:08,799
+as parameter and then we extend
+
+1698
+01:25:09,366 --> 01:25:11,799
+or reinforce this authontication token
+
+1699
+01:25:11,800 --> 01:25:14,200
+with the details of our request
+
+1700
+01:25:14,533 --> 01:25:16,966
+and then we update the authontication token
+
+1701
+01:25:17,066 --> 01:25:19,166
+and don't forget as a last step
+
+1702
+01:25:19,166 --> 01:25:21,599
+and always do think about
+
+1703
+01:25:21,666 --> 01:25:23,299
+after this if
+
+1704
+01:25:23,666 --> 01:25:27,299
+think about always calling our filter chain
+
+1705
+01:25:27,566 --> 01:25:29,266
+dot do filter
+
+1706
+01:25:29,266 --> 01:25:30,733
+so we need always
+
+1707
+01:25:30,733 --> 01:25:34,866
+to pass the hand to the next filters to be executed
+
+1708
+01:25:34,866 --> 01:25:38,933
+okay and here we need the request and the response
+
+1709
+01:25:40,166 --> 01:25:44,333
+and that's it about our JWT autonication filter
+
+1710
+01:25:44,466 --> 01:25:45,766
+it is ready to use
+
+1711
+01:25:45,766 --> 01:25:48,799
+let's move on and see what we need to implement next
+
+1712
+01:25:58,533 --> 01:26:01,299
+this whole process is now implemented
+
+1713
+01:26:01,300 --> 01:26:05,066
+but we still need to do some extra steps
+
+1714
+01:26:05,566 --> 01:26:07,666
+the extra step we need to do is
+
+1715
+01:26:07,666 --> 01:26:11,466
+to tell spring which configuration that we want to use
+
+1716
+01:26:11,466 --> 01:26:15,266
+in order to make all this works
+
+1717
+01:26:15,300 --> 01:26:17,300
+okay so we create the filter
+
+1718
+01:26:17,300 --> 01:26:19,566
+we amplimatize that the user detailed service
+
+1719
+01:26:19,800 --> 01:26:22,766
+validation updating context and so and so forth
+
+1720
+01:26:23,000 --> 01:26:26,300
+but what we are missing is the binding
+
+1721
+01:26:26,300 --> 01:26:27,500
+we need to bind
+
+1722
+01:26:27,666 --> 01:26:28,966
+because we created a filter
+
+1723
+01:26:28,966 --> 01:26:31,166
+but this filter is not yet used
+
+1724
+01:26:31,166 --> 01:26:32,733
+so we need to use it
+
+1725
+01:26:33,000 --> 01:26:34,400
+and in order to do that
+
+1726
+01:26:34,400 --> 01:26:37,266
+we need to create a new configuration class
+
+1727
+01:26:38,133 --> 01:26:40,699
+I will call it security configuration
+
+1728
+01:26:42,166 --> 01:26:47,099
+okay so I recall this class security configuration
+
+1729
+01:26:48,200 --> 01:26:50,766
+and this is going to be our
+
+1730
+01:26:50,800 --> 01:26:53,000
+security configuration class
+
+1731
+01:26:53,000 --> 01:26:56,500
+and as always to make a configuration class
+
+1732
+01:26:57,200 --> 01:26:59,466
+become a configuration
+
+1733
+01:26:59,466 --> 01:27:02,333
+we need to add this configuration annotation
+
+1734
+01:27:02,333 --> 01:27:04,499
+from spring also
+
+1735
+01:27:04,566 --> 01:27:07,466
+because we talk about security right here
+
+1736
+01:27:07,466 --> 01:27:08,799
+we need to enable
+
+1737
+01:27:09,133 --> 01:27:12,066
+web security let me make it for screen
+
+1738
+01:27:12,733 --> 01:27:16,933
+and again we will need the required arcs constructor
+
+1739
+01:27:17,066 --> 01:27:19,866
+so these 2 undertations they need to
+
+1740
+01:27:19,866 --> 01:27:20,799
+they need to be
+
+1741
+01:27:21,066 --> 01:27:24,733
+together when we when we work with spring boot 3.0
+
+1742
+01:27:25,066 --> 01:27:26,499
+okay so
+
+1743
+01:27:26,800 --> 01:27:29,366
+next what I what I will need to do
+
+1744
+01:27:29,766 --> 01:27:30,966
+because as
+
+1745
+01:27:31,300 --> 01:27:34,400
+at the startup or at the application startup
+
+1746
+01:27:34,400 --> 01:27:38,300
+spring security will try to look for being off type
+
+1747
+01:27:38,300 --> 01:27:40,266
+security filter chain
+
+1748
+01:27:40,733 --> 01:27:43,766
+and this security filter chain is the bean
+
+1749
+01:27:43,900 --> 01:27:45,133
+responsible of
+
+1750
+01:27:45,133 --> 01:27:49,533
+configuring all the HCTP security of our application
+
+1751
+01:27:49,733 --> 01:27:52,299
+so I will create a bean
+
+1752
+01:27:53,700 --> 01:27:54,566
+public
+
+1753
+01:27:55,200 --> 01:27:57,466
+security filter chain
+
+1754
+01:28:08,133 --> 01:28:10,566
+I will call it security filter chain
+
+1755
+01:28:10,666 --> 01:28:12,733
+and within this method of
+
+1756
+01:28:12,733 --> 01:28:16,666
+this bean I will pass a parameter of type http security
+
+1757
+01:28:16,666 --> 01:28:18,566
+I will call it just http
+
+1758
+01:28:18,800 --> 01:28:20,766
+just for a short variable name
+
+1759
+01:28:23,066 --> 01:28:27,333
+now let's start configuring our http security
+
+1760
+01:28:27,533 --> 01:28:29,666
+so here as you can see
+
+1761
+01:28:30,533 --> 01:28:32,666
+its type security filter chain
+
+1762
+01:28:32,800 --> 01:28:36,933
+and to do that let's 1st return http build
+
+1763
+01:28:38,000 --> 01:28:41,366
+and here we need to add also the exception
+
+1764
+01:28:41,866 --> 01:28:43,399
+to the method segulature
+
+1765
+01:28:43,400 --> 01:28:45,566
+because this build might throw an exception
+
+1766
+01:28:45,933 --> 01:28:48,566
+alright so now to do the configuration
+
+1767
+01:28:48,966 --> 01:28:51,099
+I will start by http
+
+1768
+01:28:51,333 --> 01:28:53,999
+I will 1st disable the CSRF
+
+1769
+01:28:56,000 --> 01:28:57,800
+verification and
+
+1770
+01:28:59,400 --> 01:29:02,266
+we might talk about this in a different
+
+1771
+01:29:03,300 --> 01:29:05,666
+video so here
+
+1772
+01:29:05,766 --> 01:29:10,066
+now once we disable this one and now let's move on
+
+1773
+01:29:10,066 --> 01:29:12,599
+or we will implement the configuration
+
+1774
+01:29:12,600 --> 01:29:13,866
+the real configuration
+
+1775
+01:29:14,066 --> 01:29:15,799
+so within the security
+
+1776
+01:29:16,100 --> 01:29:18,966
+we can choose and decide what are
+
+1777
+01:29:19,000 --> 01:29:22,400
+the urls and the pathes that we want to secure
+
+1778
+01:29:22,533 --> 01:29:24,099
+but of course within
+
+1779
+01:29:24,900 --> 01:29:27,766
+every application we have always a white list
+
+1780
+01:29:28,000 --> 01:29:31,400
+white list means that we have some endpoints that
+
+1781
+01:29:31,400 --> 01:29:32,800
+they do not require
+
+1782
+01:29:32,866 --> 01:29:35,099
+any authentication or any tokens
+
+1783
+01:29:35,166 --> 01:29:37,333
+that which are open for example
+
+1784
+01:29:39,533 --> 01:29:40,866
+when we talk about
+
+1785
+01:29:41,500 --> 01:29:43,766
+creating an account and logging
+
+1786
+01:29:43,966 --> 01:29:45,266
+so in this case
+
+1787
+01:29:45,266 --> 01:29:47,933
+to create an account we don't need a JWT token
+
+1788
+01:29:47,933 --> 01:29:49,999
+because at that time we will create
+
+1789
+01:29:50,533 --> 01:29:53,566
+user account and we will require or we'll ask for
+
+1790
+01:29:53,966 --> 01:29:57,533
+a token after that also the same when we want to login
+
+1791
+01:29:57,533 --> 01:29:59,899
+we don't need to pass the token as parameter
+
+1792
+01:29:59,900 --> 01:30:01,400
+because we don't have one yet
+
+1793
+01:30:01,600 --> 01:30:02,766
+so in this case
+
+1794
+01:30:03,300 --> 01:30:05,900
+this is when we talk about white listing
+
+1795
+01:30:06,933 --> 01:30:10,099
+and here is how we can implement white listing
+
+1796
+01:30:10,300 --> 01:30:12,900
+so after disabling the CSRF
+
+1797
+01:30:13,166 --> 01:30:17,099
+I want to authorize HCTP requests
+
+1798
+01:30:17,533 --> 01:30:19,166
+and after authorizing
+
+1799
+01:30:19,166 --> 01:30:22,666
+after using or calling this authorized HCP request
+
+1800
+01:30:22,766 --> 01:30:25,766
+here we can call a request matcher
+
+1801
+01:30:26,566 --> 01:30:27,366
+dot
+
+1802
+01:30:27,800 --> 01:30:29,200
+request matchers
+
+1803
+01:30:29,466 --> 01:30:32,899
+and for this request matchers we can pass a list
+
+1804
+01:30:33,066 --> 01:30:35,766
+of strings and a list of patterns
+
+1805
+01:30:35,766 --> 01:30:36,933
+this will represent
+
+1806
+01:30:37,600 --> 01:30:39,800
+the application or our application patterns
+
+1807
+01:30:39,800 --> 01:30:42,000
+we will go back to this later on
+
+1808
+01:30:42,066 --> 01:30:44,566
+and for this list I want to permit all
+
+1809
+01:30:44,566 --> 01:30:48,166
+I want all the requests in here all the
+
+1810
+01:30:48,166 --> 01:30:50,666
+all this list I want to permit all
+
+1811
+01:30:50,933 --> 01:30:53,466
+okay and then any request
+
+1812
+01:30:54,466 --> 01:30:58,499
+all the other requests I want them to be authenticated
+
+1813
+01:31:00,100 --> 01:31:02,966
+so this means I want to white list
+
+1814
+01:31:04,200 --> 01:31:06,100
+this list and authorize all
+
+1815
+01:31:06,333 --> 01:31:08,266
+the requests within this list
+
+1816
+01:31:08,266 --> 01:31:11,933
+but any other request should be authenticated
+
+1817
+01:31:11,933 --> 01:31:13,666
+okay now
+
+1818
+01:31:14,300 --> 01:31:15,666
+let's talk about
+
+1819
+01:31:15,666 --> 01:31:16,266
+and let's
+
+1820
+01:31:16,266 --> 01:31:19,599
+see how we can configure our session management
+
+1821
+01:31:19,700 --> 01:31:21,766
+the session management means what
+
+1822
+01:31:22,300 --> 01:31:25,533
+we said that when we implemented the filter we want
+
+1823
+01:31:26,266 --> 01:31:28,733
+a one spur request filter means
+
+1824
+01:31:28,966 --> 01:31:31,133
+every request should be authenticated
+
+1825
+01:31:31,400 --> 01:31:33,300
+this means that we should not
+
+1826
+01:31:33,566 --> 01:31:36,566
+store the authonication state
+
+1827
+01:31:36,566 --> 01:31:39,266
+or the session state should not be stored
+
+1828
+01:31:39,266 --> 01:31:42,299
+so the the session should be stateless
+
+1829
+01:31:42,566 --> 01:31:45,799
+and this will help us ensure that each
+
+1830
+01:31:45,800 --> 01:31:47,866
+request should be authonicated
+
+1831
+01:31:47,900 --> 01:31:48,700
+okay
+
+1832
+01:31:48,900 --> 01:31:52,933
+so now we use the end to add a new configuration
+
+1833
+01:31:53,133 --> 01:31:54,999
+and here let's add
+
+1834
+01:31:55,900 --> 01:31:56,700
+dot
+
+1835
+01:31:59,333 --> 01:32:00,699
+session management
+
+1836
+01:32:01,766 --> 01:32:02,399
+and
+
+1837
+01:32:02,400 --> 01:32:06,200
+here I want to talk about the session creation policy
+
+1838
+01:32:06,266 --> 01:32:08,666
+how we want to create our session
+
+1839
+01:32:08,766 --> 01:32:10,499
+so as I mentioned our session
+
+1840
+01:32:10,500 --> 01:32:12,966
+we wanted to be stateless session
+
+1841
+01:32:13,066 --> 01:32:13,533
+okay
+
+1842
+01:32:13,533 --> 01:32:17,599
+so I will use session creation policy dot stateless
+
+1843
+01:32:18,300 --> 01:32:19,200
+and like this
+
+1844
+01:32:19,200 --> 01:32:22,766
+spring will create a new session for each request
+
+1845
+01:32:23,533 --> 01:32:25,166
+and then end
+
+1846
+01:32:27,200 --> 01:32:30,000
+here I need to tell spring
+
+1847
+01:32:30,000 --> 01:32:33,500
+which authontication provider that I want to use
+
+1848
+01:32:33,600 --> 01:32:35,000
+the authontication provider
+
+1849
+01:32:35,000 --> 01:32:37,366
+I will explain it in just a few seconds
+
+1850
+01:32:37,900 --> 01:32:40,333
+okay so I will just add it
+
+1851
+01:32:42,266 --> 01:32:43,733
+authentication provider
+
+1852
+01:32:43,733 --> 01:32:45,733
+and that will create an object of type
+
+1853
+01:32:45,733 --> 01:32:47,099
+authentication provider
+
+1854
+01:32:51,200 --> 01:32:53,866
+and then I will go back and create it later on
+
+1855
+01:32:53,866 --> 01:32:57,499
+and then after the authontication provider
+
+1856
+01:32:57,866 --> 01:33:02,966
+I want now to use the JWT filter that we just created
+
+1857
+01:33:03,000 --> 01:33:03,666
+okay
+
+1858
+01:33:03,666 --> 01:33:08,066
+so to do that I will use the method add filter before
+
+1859
+01:33:08,333 --> 01:33:11,366
+because I want to execute this filter
+
+1860
+01:33:11,700 --> 01:33:13,100
+before the filter
+
+1861
+01:33:13,100 --> 01:33:16,566
+called username password authonication filter
+
+1862
+01:33:18,700 --> 01:33:20,100
+because as you remember
+
+1863
+01:33:20,333 --> 01:33:24,966
+when we implemented the JWT autonication filter
+
+1864
+01:33:25,133 --> 01:33:28,266
+we check everything and then we set
+
+1865
+01:33:28,400 --> 01:33:31,733
+security context we update the security context holder
+
+1866
+01:33:31,800 --> 01:33:32,700
+and after that
+
+1867
+01:33:32,700 --> 01:33:36,300
+we will be calling the username password authonication
+
+1868
+01:33:36,300 --> 01:33:37,366
+filter okay
+
+1869
+01:33:37,666 --> 01:33:39,499
+so here I will use
+
+1870
+01:33:40,366 --> 01:33:42,166
+JWT off filter
+
+1871
+01:33:42,166 --> 01:33:43,533
+I will call it like that
+
+1872
+01:33:43,533 --> 01:33:46,866
+and I want it before the user name
+
+1873
+01:33:47,933 --> 01:33:52,466
+password authentication filter dot class okay
+
+1874
+01:33:54,933 --> 01:33:58,266
+now let's let me create this object
+
+1875
+01:33:59,666 --> 01:34:01,199
+so I will use the
+
+1876
+01:34:02,000 --> 01:34:04,000
+oops not local variable
+
+1877
+01:34:05,200 --> 01:34:06,966
+but create a field
+
+1878
+01:34:07,066 --> 01:34:10,299
+and this one I wanted to be of type JWT
+
+1879
+01:34:10,300 --> 01:34:12,100
+authontication filter
+
+1880
+01:34:12,766 --> 01:34:13,566
+okay
+
+1881
+01:34:13,866 --> 01:34:15,499
+so this is the 1st one
+
+1882
+01:34:15,866 --> 01:34:18,166
+and I needed to be final
+
+1883
+01:34:19,266 --> 01:34:22,699
+so it will be automatically injected by spring
+
+1884
+01:34:22,700 --> 01:34:24,133
+and the next one
+
+1885
+01:34:24,900 --> 01:34:27,400
+is the authontication provider
+
+1886
+01:34:30,366 --> 01:34:32,199
+so let s create a field
+
+1887
+01:34:32,733 --> 01:34:36,499
+of type authentication provider and let s make it final
+
+1888
+01:34:36,500 --> 01:34:37,300
+1221
+
+1889
+01:34:38,166 --> 01:34:41,399
+alright so now I have my configuration ready
+
+1890
+01:34:41,900 --> 01:34:42,900
+all I need to do
+
+1891
+01:34:42,900 --> 01:34:46,133
+or I need to implement now is this authentication
+
+1892
+01:34:46,133 --> 01:34:49,133
+provider and let's do it right now
+
+1893
+01:34:59,300 --> 01:35:03,300
+now we need to provide this authentication provider bin
+
+1894
+01:35:03,533 --> 01:35:07,499
+so let's go to our application conflict class
+
+1895
+01:35:07,500 --> 01:35:09,933
+and let's create a new bin
+
+1896
+01:35:10,100 --> 01:35:13,166
+of type authentication provider
+
+1897
+01:35:13,300 --> 01:35:16,333
+okay so for this authentication provider
+
+1898
+01:35:16,466 --> 01:35:18,866
+let me make this full screen
+
+1899
+01:35:20,700 --> 01:35:22,666
+so I want to create a bean
+
+1900
+01:35:25,466 --> 01:35:27,133
+and always public
+
+1901
+01:35:27,400 --> 01:35:30,333
+and the bean type authontication
+
+1902
+01:35:31,500 --> 01:35:32,300
+provider
+
+1903
+01:35:33,133 --> 01:35:35,199
+oh authontication provider
+
+1904
+01:35:35,300 --> 01:35:38,333
+always from the spring framework package
+
+1905
+01:35:38,700 --> 01:35:41,800
+and I will call it authontication provider
+
+1906
+01:35:43,333 --> 01:35:46,899
+and let's start implementing this being right now
+
+1907
+01:35:47,100 --> 01:35:47,700
+so
+
+1908
+01:35:47,700 --> 01:35:51,733
+this authentication provider is the data access object
+
+1909
+01:35:51,766 --> 01:35:55,766
+which is responsible to fetch the user details
+
+1910
+01:35:55,766 --> 01:35:58,799
+and also include password and so and so forth
+
+1911
+01:35:58,900 --> 01:36:00,500
+so for this we have
+
+1912
+01:36:00,500 --> 01:36:02,600
+for this authentication provider
+
+1913
+01:36:02,900 --> 01:36:04,966
+we have many implementations
+
+1914
+01:36:05,166 --> 01:36:08,166
+and one of them is the dao
+
+1915
+01:36:08,666 --> 01:36:10,199
+authontication provider
+
+1916
+01:36:10,200 --> 01:36:13,366
+so data access object authentication provider
+
+1917
+01:36:13,566 --> 01:36:15,999
+I will call it auth provider
+
+1918
+01:36:16,400 --> 01:36:20,566
+equals new dao authontication provider
+
+1919
+01:36:21,300 --> 01:36:22,100
+okay
+
+1920
+01:36:22,666 --> 01:36:23,366
+so
+
+1921
+01:36:23,366 --> 01:36:27,699
+within this authentication provider we need to specify
+
+1922
+01:36:27,766 --> 01:36:28,866
+few properties
+
+1923
+01:36:28,866 --> 01:36:30,999
+or like not few but just 2 of them
+
+1924
+01:36:31,400 --> 01:36:33,300
+and the 1st one
+
+1925
+01:36:34,766 --> 01:36:37,999
+is the user detailed service
+
+1926
+01:36:38,166 --> 01:36:41,466
+so we need to tell this authontication provider
+
+1927
+01:36:41,466 --> 01:36:43,799
+which user detailed service to use
+
+1928
+01:36:44,000 --> 01:36:47,600
+in order to fetch information about our user
+
+1929
+01:36:47,900 --> 01:36:49,200
+because we might have
+
+1930
+01:36:49,200 --> 01:36:51,866
+multiple implementations of the user details
+
+1931
+01:36:51,933 --> 01:36:52,966
+one for example
+
+1932
+01:36:52,966 --> 01:36:55,399
+getting the information from the database
+
+1933
+01:36:55,600 --> 01:36:56,600
+another one based
+
+1934
+01:36:57,066 --> 01:36:58,566
+on a different profile
+
+1935
+01:36:58,766 --> 01:36:59,999
+fetching the users
+
+1936
+01:37:00,400 --> 01:37:04,266
+from in memory database from ELDAP and so and so forth
+
+1937
+01:37:04,266 --> 01:37:07,333
+okay so for this one we already have our
+
+1938
+01:37:08,366 --> 01:37:11,766
+oops we already have our user details
+
+1939
+01:37:12,266 --> 01:37:13,599
+service right here
+
+1940
+01:37:13,600 --> 01:37:16,466
+so this one is referencing this method
+
+1941
+01:37:17,133 --> 01:37:21,466
+next we need to provide a password on encoder
+
+1942
+01:37:21,566 --> 01:37:22,699
+so which
+
+1943
+01:37:22,700 --> 01:37:26,700
+password encoder we are using within our application
+
+1944
+01:37:26,800 --> 01:37:28,933
+so if you have a specific one
+
+1945
+01:37:28,933 --> 01:37:30,933
+or if you are using a specific one
+
+1946
+01:37:30,966 --> 01:37:32,899
+you need also to precise this one
+
+1947
+01:37:32,900 --> 01:37:34,400
+because when we want to try
+
+1948
+01:37:34,766 --> 01:37:36,766
+or we want to authenticate a user
+
+1949
+01:37:36,766 --> 01:37:38,899
+we need to know which password
+
+1950
+01:37:38,900 --> 01:37:41,500
+in order to be able to decode the password
+
+1951
+01:37:41,566 --> 01:37:43,366
+using the correct algorithm
+
+1952
+01:37:43,366 --> 01:37:47,099
+okay so earth provider dot
+
+1953
+01:37:48,466 --> 01:37:52,266
+set password encoder and here I will create a method
+
+1954
+01:37:52,533 --> 01:37:54,666
+I will call it password encoder
+
+1955
+01:37:54,666 --> 01:37:57,466
+okay and I will create being out of it later on
+
+1956
+01:37:58,200 --> 01:37:59,333
+so this is
+
+1957
+01:37:59,333 --> 01:38:02,333
+the minimum required information that we need to
+
+1958
+01:38:02,700 --> 01:38:03,500
+provide
+
+1959
+01:38:06,166 --> 01:38:09,199
+and then all I need to do is returning this earth
+
+1960
+01:38:09,200 --> 01:38:10,666
+provider right here
+
+1961
+01:38:11,000 --> 01:38:14,766
+now I will just go ahead and create this
+
+1962
+01:38:15,466 --> 01:38:16,899
+password encoder
+
+1963
+01:38:19,666 --> 01:38:23,133
+so this password encoder is also should be also a bean
+
+1964
+01:38:23,300 --> 01:38:26,366
+so it will be public and they will give it
+
+1965
+01:38:26,933 --> 01:38:28,499
+the bean annotation
+
+1966
+01:38:32,366 --> 01:38:35,799
+and for this I just need to return a new
+
+1967
+01:38:36,666 --> 01:38:39,266
+B crypt password encoder
+
+1968
+01:38:39,500 --> 01:38:40,733
+and that's it
+
+1969
+01:38:40,766 --> 01:38:44,299
+so now I have my authontication provider
+
+1970
+01:38:44,466 --> 01:38:48,333
+and also I created the password encoder being
+
+1971
+01:38:57,000 --> 01:39:00,400
+one more step is needed to finish this application
+
+1972
+01:39:00,400 --> 01:39:04,900
+config class which is the authontication manager
+
+1973
+01:39:04,900 --> 01:39:06,900
+and the authontication manager
+
+1974
+01:39:07,066 --> 01:39:09,733
+as the name indicates
+
+1975
+01:39:09,733 --> 01:39:12,766
+is the one responsible to manage the authontication
+
+1976
+01:39:12,766 --> 01:39:14,466
+so the authontication manager
+
+1977
+01:39:14,766 --> 01:39:19,299
+have or has a bunch of methods and one of them
+
+1978
+01:39:19,700 --> 01:39:21,066
+the reason method that
+
+1979
+01:39:21,066 --> 01:39:23,333
+allow us or help us to authenticate
+
+1980
+01:39:23,333 --> 01:39:27,699
+user based or using just the username and password
+
+1981
+01:39:27,800 --> 01:39:29,100
+and for that we need
+
+1982
+01:39:29,100 --> 01:39:31,866
+also to create a bean or to provide the bean to be
+
+1983
+01:39:31,866 --> 01:39:33,333
+able to use it later on
+
+1984
+01:39:33,333 --> 01:39:38,066
+okay so I will create a bean and public
+
+1985
+01:39:39,933 --> 01:39:41,933
+authontication manager
+
+1986
+01:39:42,733 --> 01:39:45,566
+because this is the bean that I want to create
+
+1987
+01:39:45,566 --> 01:39:48,066
+and I will call it authontication manager
+
+1988
+01:39:48,200 --> 01:39:51,166
+and within this bean I want to inject
+
+1989
+01:39:51,166 --> 01:39:54,766
+an object of type authontication configuration
+
+1990
+01:39:56,000 --> 01:39:58,133
+okay and I will call it config
+
+1991
+01:39:58,500 --> 01:40:00,666
+this authontication configuration
+
+1992
+01:40:01,100 --> 01:40:02,800
+hold already
+
+1993
+01:40:02,800 --> 01:40:06,533
+the information about the authontication managers
+
+1994
+01:40:06,533 --> 01:40:08,733
+so I will just return
+
+1995
+01:40:09,100 --> 01:40:12,766
+config dot get authontication manager
+
+1996
+01:40:13,733 --> 01:40:15,566
+right so here we are using the
+
+1997
+01:40:15,566 --> 01:40:17,866
+default implementation of spring boot
+
+1998
+01:40:17,866 --> 01:40:21,366
+and this is more than sufficient for us here
+
+1999
+01:40:21,366 --> 01:40:23,133
+don't forget also to add
+
+2000
+01:40:23,466 --> 01:40:26,333
+the exception to the method signature
+
+2001
+01:40:26,400 --> 01:40:28,766
+so that's it let's move on and
+
+2002
+01:40:36,933 --> 01:40:39,799
+now we're done with all the security configuration
+
+2003
+01:40:39,800 --> 01:40:40,966
+for our application
+
+2004
+01:40:40,966 --> 01:40:42,366
+but we still need
+
+2005
+01:40:42,533 --> 01:40:45,999
+to provide at least 2 endpoints where the user
+
+2006
+01:40:46,000 --> 01:40:47,933
+can create an account or
+
+2007
+01:40:47,966 --> 01:40:49,533
+also can authenticate
+
+2008
+01:40:49,800 --> 01:40:53,300
+and to do so within the BS package I will create
+
+2009
+01:40:54,166 --> 01:40:55,933
+a package I will call it off
+
+2010
+01:40:56,200 --> 01:40:59,700
+and within this package I will create a new controller
+
+2011
+01:40:59,700 --> 01:41:00,900
+authontication
+
+2012
+01:41:02,500 --> 01:41:03,300
+controller
+
+2013
+01:41:03,733 --> 01:41:08,566
+and this authonication controller will have 2 endpoints
+
+2014
+01:41:08,733 --> 01:41:10,799
+that will allow me to create
+
+2015
+01:41:10,800 --> 01:41:12,300
+or register a new account
+
+2016
+01:41:12,300 --> 01:41:14,500
+and authonicate an existing user
+
+2017
+01:41:14,966 --> 01:41:18,066
+so in order to call this or to make this
+
+2018
+01:41:18,366 --> 01:41:19,766
+class a controller
+
+2019
+01:41:19,800 --> 01:41:23,166
+we need this annotation rest controller
+
+2020
+01:41:23,533 --> 01:41:26,966
+and also I will give it a request mapping
+
+2021
+01:41:27,333 --> 01:41:31,366
+and for the request mapping it will be slash API slash
+
+2022
+01:41:31,366 --> 01:41:33,099
+we want slash off
+
+2023
+01:41:34,100 --> 01:41:36,100
+and also I will need
+
+2024
+01:41:37,400 --> 01:41:39,666
+the required arcs constructor
+
+2025
+01:41:39,666 --> 01:41:40,466
+okay
+
+2026
+01:41:41,333 --> 01:41:45,099
+now within this authontication controller
+
+2027
+01:41:45,200 --> 01:41:47,200
+I will create 2 and points
+
+2028
+01:41:47,200 --> 01:41:48,366
+one for register
+
+2029
+01:41:48,366 --> 01:41:50,466
+and the other one for the authonticate
+
+2030
+01:41:50,666 --> 01:41:53,466
+so the 1st one it will be a post mapping
+
+2031
+01:41:53,933 --> 01:41:56,933
+and I will give it a register
+
+2032
+01:41:57,300 --> 01:42:00,500
+for the name and here it will be a public
+
+2033
+01:42:01,266 --> 01:42:02,533
+response
+
+2034
+01:42:05,000 --> 01:42:10,600
+NTT and now the type will be authontication response
+
+2035
+01:42:10,600 --> 01:42:13,666
+I will create an object later on for that
+
+2036
+01:42:13,900 --> 01:42:16,200
+we will call this method resistor
+
+2037
+01:42:17,400 --> 01:42:21,366
+and this register will need a request body
+
+2038
+01:42:22,166 --> 01:42:25,799
+and this request body I will create an object called
+
+2039
+01:42:26,333 --> 01:42:27,966
+register request
+
+2040
+01:42:28,366 --> 01:42:29,566
+which will hold
+
+2041
+01:42:30,533 --> 01:42:31,666
+all the
+
+2042
+01:42:31,900 --> 01:42:35,266
+requests or the registration information like 1st name
+
+2043
+01:42:35,266 --> 01:42:37,266
+last name email and password
+
+2044
+01:42:37,266 --> 01:42:38,066
+okay
+
+2045
+01:42:38,466 --> 01:42:40,933
+so I will leave it empty for now
+
+2046
+01:42:40,933 --> 01:42:43,299
+we will implement it later on
+
+2047
+01:42:44,666 --> 01:42:48,699
+I will do the same I will just copy paste this one
+
+2048
+01:42:49,000 --> 01:42:51,566
+and I will create another method
+
+2049
+01:42:51,566 --> 01:42:55,133
+but this one will call it authonticate
+
+2050
+01:42:55,333 --> 01:42:58,399
+and it will also return an authontication response
+
+2051
+01:42:58,400 --> 01:43:00,566
+but instead of register request
+
+2052
+01:43:00,566 --> 01:43:04,166
+we will need an authontication request okay
+
+2053
+01:43:07,300 --> 01:43:09,666
+so it's a northonication request
+
+2054
+01:43:10,400 --> 01:43:11,266
+yep that's it
+
+2055
+01:43:11,266 --> 01:43:13,266
+so we have our controller ready
+
+2056
+01:43:13,266 --> 01:43:16,866
+now let's move on and start implementing things
+
+2057
+01:43:24,900 --> 01:43:27,866
+let's now create our authentication response
+
+2058
+01:43:27,966 --> 01:43:30,299
+so now just
+
+2059
+01:43:31,966 --> 01:43:33,499
+amu I will use antility
+
+2060
+01:43:33,600 --> 01:43:36,500
+to create this class authentication response
+
+2061
+01:43:36,500 --> 01:43:39,300
+and we created within the same package
+
+2062
+01:43:41,400 --> 01:43:43,666
+so this response is a simple class
+
+2063
+01:43:43,900 --> 01:43:48,333
+that will have only a string token
+
+2064
+01:43:49,933 --> 01:43:52,766
+so this is the token that would be sent back to the
+
+2065
+01:43:53,166 --> 01:43:54,966
+to the customer or to the user
+
+2066
+01:43:55,266 --> 01:43:58,933
+and to do that we will need the state annotation
+
+2067
+01:43:59,100 --> 01:44:00,533
+we'll need the builder
+
+2068
+01:44:02,000 --> 01:44:05,933
+and of course the all arcs constructor and the
+
+2069
+01:44:06,466 --> 01:44:07,299
+no arcs
+
+2070
+01:44:08,500 --> 01:44:12,700
+so that's it so our authontication response is ready
+
+2071
+01:44:12,700 --> 01:44:16,000
+let's move on and create the register request
+
+2072
+01:44:24,333 --> 01:44:28,133
+now let's create this register request class
+
+2073
+01:44:28,300 --> 01:44:30,400
+so create a class right here
+
+2074
+01:44:30,400 --> 01:44:32,766
+and we'll create it within the same package
+
+2075
+01:44:34,466 --> 01:44:36,166
+so this registered request
+
+2076
+01:44:36,166 --> 01:44:40,766
+it will also have few attributes like private
+
+2077
+01:44:41,933 --> 01:44:43,699
+string 1st name
+
+2078
+01:44:47,400 --> 01:44:49,200
+private string
+
+2079
+01:44:52,500 --> 01:44:57,066
+last name and also an email and password
+
+2080
+01:45:03,466 --> 01:45:07,066
+so we will also need the same annotations as
+
+2081
+01:45:07,100 --> 01:45:08,533
+we used within this
+
+2082
+01:45:08,700 --> 01:45:10,166
+authontication response
+
+2083
+01:45:10,166 --> 01:45:12,133
+so just go ahead and copy them
+
+2084
+01:45:13,300 --> 01:45:16,700
+and put them within this register request
+
+2085
+01:45:17,100 --> 01:45:17,766
+okay
+
+2086
+01:45:17,766 --> 01:45:21,899
+so now we have also our object register request ready
+
+2087
+01:45:21,966 --> 01:45:24,066
+I will create as a next step
+
+2088
+01:45:24,066 --> 01:45:26,466
+the authontication request object
+
+2089
+01:45:34,666 --> 01:45:36,366
+finally we need to create this
+
+2090
+01:45:36,366 --> 01:45:39,166
+automatication request within the same package
+
+2091
+01:45:39,366 --> 01:45:42,766
+so I will just paste the same annotations
+
+2092
+01:45:42,766 --> 01:45:45,099
+and here this object will hold
+
+2093
+01:45:45,500 --> 01:45:49,300
+only 2 information which is the string email and
+
+2094
+01:45:49,566 --> 01:45:51,099
+string password
+
+2095
+01:45:52,500 --> 01:45:55,900
+okay so that's it our object now ready
+
+2096
+01:45:55,933 --> 01:45:58,966
+let's move on and start implementing this
+
+2097
+01:45:59,266 --> 01:46:00,799
+author register and
+
+2098
+01:46:01,266 --> 01:46:02,966
+authenticate request
+
+2099
+01:46:13,000 --> 01:46:13,733
+so for the
+
+2100
+01:46:13,733 --> 01:46:16,933
+resistoration and authontication implementation
+
+2101
+01:46:16,933 --> 01:46:19,166
+I will delegate this to a service
+
+2102
+01:46:19,366 --> 01:46:24,299
+so within this author package I will create a new class
+
+2103
+01:46:24,566 --> 01:46:28,133
+and I will call it authontication service
+
+2104
+01:46:29,066 --> 01:46:29,499
+alright
+
+2105
+01:46:29,500 --> 01:46:32,333
+this is the place or the class where I will implement
+
+2106
+01:46:32,700 --> 01:46:36,000
+these 2 methods register and authenticate
+
+2107
+01:46:36,200 --> 01:46:39,500
+so here I will just give it the service a notation
+
+2108
+01:46:39,500 --> 01:46:42,666
+and of course the required arx constructor
+
+2109
+01:46:45,166 --> 01:46:48,199
+alright so here we have these 2 methods
+
+2110
+01:46:48,400 --> 01:46:50,133
+I will just move on
+
+2111
+01:46:51,066 --> 01:46:55,733
+and here just make a simple call for
+
+2112
+01:46:57,733 --> 01:47:00,699
+for these service methods but 1st let's inject it
+
+2113
+01:47:00,700 --> 01:47:05,533
+okay so I will need private final authontication
+
+2114
+01:47:07,300 --> 01:47:10,400
+service I recorded just service right here
+
+2115
+01:47:11,566 --> 01:47:14,533
+and within this authontication service
+
+2116
+01:47:14,533 --> 01:47:16,399
+let me make this full screen
+
+2117
+01:47:17,166 --> 01:47:18,466
+now I will just
+
+2118
+01:47:18,500 --> 01:47:21,866
+make the return statements for these 2 methods
+
+2119
+01:47:22,066 --> 01:47:26,133
+alright so here I will return a response NTT
+
+2120
+01:47:30,133 --> 01:47:33,299
+dot okay and I will call my service dot
+
+2121
+01:47:33,866 --> 01:47:37,933
+register and I will pass this request as parameter
+
+2122
+01:47:37,933 --> 01:47:38,733
+okay
+
+2123
+01:47:39,133 --> 01:47:41,733
+and I will copy paste this
+
+2124
+01:47:42,066 --> 01:47:44,133
+and paste it right here
+
+2125
+01:47:44,133 --> 01:47:47,799
+and instead of resistor it will be authonticate
+
+2126
+01:47:48,900 --> 01:47:50,800
+so here we don't have yet
+
+2127
+01:47:50,933 --> 01:47:53,133
+our resistor and authonticate method
+
+2128
+01:47:53,133 --> 01:47:55,133
+so let's go ahead and create them
+
+2129
+01:47:56,100 --> 01:47:57,800
+so create method resistor
+
+2130
+01:47:57,800 --> 01:48:01,766
+and this one will return the authontication response
+
+2131
+01:48:05,666 --> 01:48:08,333
+so this is what we want to return
+
+2132
+01:48:10,600 --> 01:48:15,000
+and now we can also create this authonticate method
+
+2133
+01:48:15,000 --> 01:48:18,466
+and the same it should return an authontication
+
+2134
+01:48:19,266 --> 01:48:20,366
+response
+
+2135
+01:48:22,266 --> 01:48:26,466
+alright so now I will start implementing these methods
+
+2136
+01:48:36,800 --> 01:48:40,400
+so now let's implement this register method
+
+2137
+01:48:40,400 --> 01:48:44,266
+and this register will allow us to create a user
+
+2138
+01:48:44,400 --> 01:48:45,900
+safe to the database
+
+2139
+01:48:45,900 --> 01:48:49,000
+and return the generated token out of it
+
+2140
+01:48:50,766 --> 01:48:54,099
+so for that because we need our
+
+2141
+01:48:54,100 --> 01:48:57,400
+we want to interact with a database and save the user
+
+2142
+01:48:57,400 --> 01:49:01,366
+so the 1st thing that we need is to inject our
+
+2143
+01:49:01,766 --> 01:49:02,866
+repository
+
+2144
+01:49:04,900 --> 01:49:07,300
+let's call it repository right here
+
+2145
+01:49:08,200 --> 01:49:10,533
+and then what we need to do
+
+2146
+01:49:10,566 --> 01:49:12,866
+I want to create a user
+
+2147
+01:49:12,866 --> 01:49:16,133
+object out of this register request
+
+2148
+01:49:16,133 --> 01:49:22,166
+so I will create our user equals user dot builder
+
+2149
+01:49:24,866 --> 01:49:26,133
+and here dot build
+
+2150
+01:49:26,133 --> 01:49:30,399
+so to build this user out of this register request
+
+2151
+01:49:30,700 --> 01:49:34,300
+so I will have the 1st name which is
+
+2152
+01:49:36,000 --> 01:49:37,866
+request dot get 1st name
+
+2153
+01:49:38,066 --> 01:49:39,566
+same for the last name
+
+2154
+01:49:42,300 --> 01:49:44,266
+and same for email
+
+2155
+01:49:45,666 --> 01:49:46,966
+so it's email
+
+2156
+01:49:46,966 --> 01:49:50,399
+and then the value will be the request to get email
+
+2157
+01:49:50,666 --> 01:49:52,199
+now for the password
+
+2158
+01:49:53,266 --> 01:49:54,366
+as you remember
+
+2159
+01:49:54,366 --> 01:49:58,099
+we created our being of Thai password encoder
+
+2160
+01:49:58,100 --> 01:50:01,000
+so for this we need to encode
+
+2161
+01:50:01,500 --> 01:50:04,533
+our password before saving it to the database
+
+2162
+01:50:04,533 --> 01:50:08,099
+okay so in order to encode the password we need
+
+2163
+01:50:08,100 --> 01:50:10,333
+1st of all to inject
+
+2164
+01:50:10,600 --> 01:50:12,866
+our password encoder service
+
+2165
+01:50:12,866 --> 01:50:14,399
+so I will do that
+
+2166
+01:50:16,933 --> 01:50:19,766
+password encoder password encoder
+
+2167
+01:50:20,533 --> 01:50:21,666
+and this
+
+2168
+01:50:21,900 --> 01:50:25,766
+I will use it right here password encoder dot in code
+
+2169
+01:50:25,766 --> 01:50:29,133
+and here I have the get password or the request
+
+2170
+01:50:29,133 --> 01:50:30,266
+dot get password
+
+2171
+01:50:30,533 --> 01:50:34,199
+that we will receive within the registration request
+
+2172
+01:50:34,600 --> 01:50:35,733
+okay so
+
+2173
+01:50:36,566 --> 01:50:38,799
+here I will just make
+
+2174
+01:50:39,333 --> 01:50:41,166
+a static roll always
+
+2175
+01:50:41,600 --> 01:50:44,166
+so I will use a user roll
+
+2176
+01:50:44,800 --> 01:50:47,266
+and then we call the building method
+
+2177
+01:50:47,266 --> 01:50:48,066
+all right
+
+2178
+01:50:49,000 --> 01:50:51,866
+so once we build our user object
+
+2179
+01:50:51,866 --> 01:50:55,699
+the next step we need to do is our repository dot save
+
+2180
+01:50:56,300 --> 01:50:59,666
+and we want to save the user that we just created
+
+2181
+01:50:59,933 --> 01:51:02,266
+alright and finally
+
+2182
+01:51:03,166 --> 01:51:06,299
+to be to return this authentication response
+
+2183
+01:51:06,300 --> 01:51:08,166
+that contains the token
+
+2184
+01:51:08,366 --> 01:51:13,166
+I will create a new variable I will call it JWT token
+
+2185
+01:51:14,100 --> 01:51:14,966
+equals
+
+2186
+01:51:15,000 --> 01:51:19,366
+now I will need my JWT service to generate that token
+
+2187
+01:51:19,533 --> 01:51:22,899
+so I will I will inject also the private
+
+2188
+01:51:23,466 --> 01:51:26,299
+final JWT service
+
+2189
+01:51:28,533 --> 01:51:32,266
+and I will use it to create or to generate the token
+
+2190
+01:51:32,333 --> 01:51:34,999
+using this user object right here
+
+2191
+01:51:36,966 --> 01:51:38,533
+so JWT
+
+2192
+01:51:39,333 --> 01:51:42,199
+service dot generate token
+
+2193
+01:51:42,200 --> 01:51:45,166
+the one only using a user details for the moment
+
+2194
+01:51:45,166 --> 01:51:47,466
+I don't need to set any extra claims
+
+2195
+01:51:47,766 --> 01:51:48,566
+so
+
+2196
+01:51:48,966 --> 01:51:51,199
+I will use this user
+
+2197
+01:51:51,333 --> 01:51:53,733
+object to create or to generate a token
+
+2198
+01:51:54,566 --> 01:51:55,499
+and finally
+
+2199
+01:51:55,500 --> 01:51:59,166
+I will return an object of type authentication response
+
+2200
+01:51:59,800 --> 01:52:01,500
+dot builder dot build
+
+2201
+01:52:03,766 --> 01:52:05,966
+and I need to pass dot
+
+2202
+01:52:06,166 --> 01:52:10,166
+token or I need to pass the token that I just generated
+
+2203
+01:52:10,300 --> 01:52:14,533
+okay so this is the register method
+
+2204
+01:52:14,666 --> 01:52:17,566
+and now everything is implemented
+
+2205
+01:52:17,566 --> 01:52:20,733
+let's move on and implement this authenticate
+
+2206
+01:52:28,900 --> 01:52:30,366
+for the authentication
+
+2207
+01:52:30,533 --> 01:52:32,299
+it's it's an easy PC
+
+2208
+01:52:32,400 --> 01:52:34,800
+so you remember we spoke before
+
+2209
+01:52:34,866 --> 01:52:36,899
+about the authentication manager being
+
+2210
+01:52:36,900 --> 01:52:40,533
+and we said that this authentication manager being
+
+2211
+01:52:40,866 --> 01:52:43,199
+has a method called authonticate
+
+2212
+01:52:43,300 --> 01:52:46,100
+which allow us to authonticate user
+
+2213
+01:52:46,100 --> 01:52:48,333
+based on the username and password
+
+2214
+01:52:48,500 --> 01:52:51,133
+so for that I will inject
+
+2215
+01:52:51,500 --> 01:52:56,100
+1st of all my private final authontication manager
+
+2216
+01:52:57,400 --> 01:53:00,566
+bean I will call it authontication manager
+
+2217
+01:53:00,933 --> 01:53:01,499
+alright
+
+2218
+01:53:01,500 --> 01:53:04,733
+so I will go back here to this authonticate method
+
+2219
+01:53:04,966 --> 01:53:06,799
+and to authonticate the user
+
+2220
+01:53:06,800 --> 01:53:10,066
+all I need to do is to call the authontication manager
+
+2221
+01:53:10,200 --> 01:53:11,466
+orthonticate
+
+2222
+01:53:11,933 --> 01:53:15,766
+and this authontication manager takes an object of type
+
+2223
+01:53:15,766 --> 01:53:18,566
+username password authontication token
+
+2224
+01:53:18,666 --> 01:53:20,499
+so I will pass a new
+
+2225
+01:53:20,733 --> 01:53:23,733
+username password authontication token
+
+2226
+01:53:23,866 --> 01:53:27,133
+and within this I need to pass the email
+
+2227
+01:53:28,566 --> 01:53:30,899
+so request dot get
+
+2228
+01:53:31,333 --> 01:53:33,599
+email and also the password
+
+2229
+01:53:34,666 --> 01:53:37,599
+request dot get password and
+
+2230
+01:53:38,266 --> 01:53:41,566
+this authentication manager will do all the job for me
+
+2231
+01:53:41,766 --> 01:53:44,166
+and in case the user is not
+
+2232
+01:53:44,366 --> 01:53:46,999
+a username or the password are not correct
+
+2233
+01:53:47,066 --> 01:53:49,099
+so an exception would be thrown
+
+2234
+01:53:49,300 --> 01:53:49,866
+alright
+
+2235
+01:53:49,866 --> 01:53:54,366
+so I'm totally secure when I just call this method
+
+2236
+01:53:54,666 --> 01:53:56,699
+otherwise what I need to do
+
+2237
+01:53:57,666 --> 01:54:00,899
+I need to create a user and if the user
+
+2238
+01:54:00,900 --> 01:54:04,600
+so if I 1st of all if I get to this point right here
+
+2239
+01:54:04,600 --> 01:54:06,666
+means the user is authenticated
+
+2240
+01:54:06,666 --> 01:54:09,299
+so means the username and password are correct
+
+2241
+01:54:10,000 --> 01:54:11,800
+if both of them are correct
+
+2242
+01:54:11,800 --> 01:54:14,500
+so I will just need to generate a token
+
+2243
+01:54:14,500 --> 01:54:15,800
+and send it back
+
+2244
+01:54:15,800 --> 01:54:21,000
+okay so I will 1st of all find try to get the user
+
+2245
+01:54:22,066 --> 01:54:23,566
+and find by email
+
+2246
+01:54:23,566 --> 01:54:26,799
+and I will use the request dot get email
+
+2247
+01:54:27,200 --> 01:54:29,766
+and here or else I will just throw
+
+2248
+01:54:29,866 --> 01:54:32,933
+okay or just throw any exception
+
+2249
+01:54:33,066 --> 01:54:35,466
+like it's not so important at this level
+
+2250
+01:54:35,766 --> 01:54:37,399
+but for you
+
+2251
+01:54:37,400 --> 01:54:39,966
+you might want to throw the correct exception
+
+2252
+01:54:39,966 --> 01:54:41,333
+and you need to catch it
+
+2253
+01:54:41,333 --> 01:54:43,599
+handle the exceptions and so and so forth
+
+2254
+01:54:43,766 --> 01:54:44,766
+alright so
+
+2255
+01:54:45,600 --> 01:54:47,866
+now I will just go ahead and copy
+
+2256
+01:54:48,066 --> 01:54:50,099
+this code because it would be the same
+
+2257
+01:54:51,400 --> 01:54:53,533
+and put it right here
+
+2258
+01:54:54,266 --> 01:54:55,899
+so once I get the user
+
+2259
+01:54:55,900 --> 01:54:58,800
+I will generate a token using this user object
+
+2260
+01:54:58,800 --> 01:55:00,666
+and then return this
+
+2261
+01:55:00,966 --> 01:55:02,866
+authonication response
+
+2262
+01:55:02,866 --> 01:55:06,499
+so now we have this authonicate method and
+
+2263
+01:55:06,500 --> 01:55:07,700
+the register method
+
+2264
+01:55:08,133 --> 01:55:09,066
+ready to use
+
+2265
+01:55:09,066 --> 01:55:11,866
+let's move on and see what is the next step
+
+2266
+01:55:21,300 --> 01:55:25,766
+now we have our authentication controller ready to use
+
+2267
+01:55:26,000 --> 01:55:28,900
+but there is one extra step that we need to do
+
+2268
+01:55:29,800 --> 01:55:32,866
+do you remember when we 1st implemented
+
+2269
+01:55:33,333 --> 01:55:36,166
+the security configuration and we spoke
+
+2270
+01:55:36,166 --> 01:55:38,766
+about this white list right here
+
+2271
+01:55:38,966 --> 01:55:41,299
+so what we need to provide now
+
+2272
+01:55:41,300 --> 01:55:44,266
+within these request matches that we want to permit
+
+2273
+01:55:44,266 --> 01:55:47,266
+all we need to provide or authorize
+
+2274
+01:55:48,066 --> 01:55:50,166
+all the urls or all the methods
+
+2275
+01:55:50,166 --> 01:55:52,966
+that we have within this authontication controller
+
+2276
+01:55:53,133 --> 01:55:56,766
+so go ahead copy the request mapping that you created
+
+2277
+01:55:57,266 --> 01:55:58,066
+and
+
+2278
+01:55:58,400 --> 01:56:02,300
+for example here I want to authorize all the methods
+
+2279
+01:56:02,466 --> 01:56:05,499
+that I have within this authentication controller
+
+2280
+01:56:05,700 --> 01:56:08,366
+why because based on my design
+
+2281
+01:56:09,566 --> 01:56:12,099
+everything that I have in here only
+
+2282
+01:56:13,400 --> 01:56:15,466
+authentication related methods
+
+2283
+01:56:15,666 --> 01:56:17,933
+so I don't have any business logic
+
+2284
+01:56:18,733 --> 01:56:20,666
+methods or endpoints within
+
+2285
+01:56:20,700 --> 01:56:22,166
+this authentication controller
+
+2286
+01:56:22,166 --> 01:56:24,999
+so that's why I'm allowing I'm allowing
+
+2287
+01:56:25,466 --> 01:56:28,366
+all the methods within this controller
+
+2288
+01:56:28,466 --> 01:56:29,799
+so that's it
+
+2289
+01:56:29,800 --> 01:56:32,766
+now let's create a demo controller for that
+
+2290
+01:56:40,266 --> 01:56:44,166
+I will create a new controller within a new package
+
+2291
+01:56:44,166 --> 01:56:45,933
+so right click here
+
+2292
+01:56:45,933 --> 01:56:48,866
+new class and I will call the package demo
+
+2293
+01:56:49,166 --> 01:56:51,099
+and I will call it demo
+
+2294
+01:56:52,166 --> 01:56:52,966
+controller
+
+2295
+01:56:53,733 --> 01:56:58,066
+so this demo controller will be also secured
+
+2296
+01:56:58,066 --> 01:57:01,299
+so I want this endpoint to be secured
+
+2297
+01:57:01,300 --> 01:57:04,333
+there will copy these annotations right here
+
+2298
+01:57:04,733 --> 01:57:07,133
+paste it here and so
+
+2299
+01:57:07,500 --> 01:57:09,700
+this one will be demo
+
+2300
+01:57:10,800 --> 01:57:13,666
+and let's call a democontroller
+
+2301
+01:57:15,300 --> 01:57:16,333
+and now
+
+2302
+01:57:16,533 --> 01:57:21,066
+I will create just a get mapping a simple method
+
+2303
+01:57:21,400 --> 01:57:22,300
+that
+
+2304
+01:57:23,133 --> 01:57:26,199
+public that will return a simple string okay
+
+2305
+01:57:26,733 --> 01:57:28,566
+response NTT
+
+2306
+01:57:29,500 --> 01:57:31,100
+of type string
+
+2307
+01:57:34,200 --> 01:57:35,533
+say hello for example
+
+2308
+01:57:35,533 --> 01:57:38,099
+and then I will just return a response
+
+2309
+01:57:38,566 --> 01:57:42,166
+NTT dot OK and with a body
+
+2310
+01:57:42,466 --> 01:57:44,799
+hello from secured
+
+2311
+01:57:46,400 --> 01:57:49,100
+hello from secret and point and that's it
+
+2312
+01:57:49,266 --> 01:57:54,166
+now let's go ahead start our application and test
+
+2313
+01:57:54,400 --> 01:57:55,533
+these changes
+
+2314
+01:58:03,733 --> 01:58:06,066
+let's start the application and make sure
+
+2315
+01:58:06,066 --> 01:58:07,899
+that all the code that we
+
+2316
+01:58:08,266 --> 01:58:10,599
+wrote together is working fine
+
+2317
+01:58:10,600 --> 01:58:12,966
+so go ahead click on start
+
+2318
+01:58:13,266 --> 01:58:16,733
+and let's see what we would have in the console
+
+2319
+01:58:17,600 --> 01:58:20,300
+so let's make sure that everything is fine
+
+2320
+01:58:20,300 --> 01:58:22,766
+so as you can see here from the logs
+
+2321
+01:58:23,066 --> 01:58:25,933
+we no longer have this autogenerated password
+
+2322
+01:58:25,933 --> 01:58:27,266
+by spring security
+
+2323
+01:58:27,266 --> 01:58:30,599
+and we have here that you are creating the sequence
+
+2324
+01:58:30,600 --> 01:58:33,133
+and we have the table user gets created
+
+2325
+01:58:33,366 --> 01:58:36,133
+and the application is running correctly
+
+2326
+01:58:36,133 --> 01:58:39,199
+okay so now let's start our postman
+
+2327
+01:58:39,566 --> 01:58:42,466
+and test this endpoint
+
+2328
+01:58:43,200 --> 01:58:46,366
+so I have my postman started right now
+
+2329
+01:58:46,366 --> 01:58:51,333
+so I will use this endpoint with then a get request
+
+2330
+01:58:51,933 --> 01:58:55,366
+so the endpoint is local host and my port is 880
+
+2331
+01:58:55,600 --> 01:58:57,766
+slash API slash B1 slash
+
+2332
+01:58:57,766 --> 01:59:00,533
+demo controller is the same one that I have
+
+2333
+01:59:00,800 --> 01:59:02,533
+right here within my code
+
+2334
+01:59:02,900 --> 01:59:04,266
+it's democontroller
+
+2335
+01:59:04,333 --> 01:59:07,333
+and now I will click on sand
+
+2336
+01:59:07,333 --> 01:59:09,699
+we see that we have no authorization
+
+2337
+01:59:09,700 --> 01:59:11,766
+we have nothing in here
+
+2338
+01:59:12,166 --> 01:59:14,699
+so I will just go ahead and click on sand
+
+2339
+01:59:14,700 --> 01:59:17,600
+and normally like the expected behavior
+
+2340
+01:59:17,800 --> 01:59:20,766
+is this endpoint should be secured
+
+2341
+01:59:20,766 --> 01:59:22,499
+okay so when I click on sand
+
+2342
+01:59:22,600 --> 01:59:27,100
+we exactly can see that we have a 4 or 3 forbidden
+
+2343
+01:59:27,500 --> 01:59:31,200
+means that we are not allowed to access this endpoint
+
+2344
+01:59:31,200 --> 01:59:32,000
+okay
+
+2345
+01:59:32,466 --> 01:59:34,599
+next we have our
+
+2346
+01:59:34,800 --> 01:59:38,000
+2 endpoints the authonticate and the register
+
+2347
+01:59:38,100 --> 01:59:41,266
+so let's 1st start with this register endpoint
+
+2348
+01:59:41,733 --> 01:59:44,366
+or that's before that let's start with authonticate
+
+2349
+01:59:44,666 --> 01:59:46,166
+and for the authonticate
+
+2350
+01:59:46,166 --> 01:59:50,099
+now we know that we have no user within our database
+
+2351
+01:59:50,100 --> 01:59:52,200
+we can also double check that
+
+2352
+01:59:52,333 --> 01:59:54,966
+so if I open let me close
+
+2353
+01:59:56,266 --> 02:00:00,166
+the other tabs so here I don't have any user resisted
+
+2354
+02:00:00,366 --> 02:00:01,866
+within my database
+
+2355
+02:00:01,866 --> 02:00:05,599
+okay but now if I try to connect
+
+2356
+02:00:05,900 --> 02:00:08,400
+or to authenticate a non existing user
+
+2357
+02:00:08,500 --> 02:00:12,366
+I also expect to have a 4 or 3 as a response
+
+2358
+02:00:12,800 --> 02:00:14,800
+and this is what we see right here
+
+2359
+02:00:14,800 --> 02:00:16,566
+so it's 4 3 forbidden
+
+2360
+02:00:16,600 --> 02:00:20,700
+and the user is not allowed to access this endpoint
+
+2361
+02:00:20,866 --> 02:00:25,599
+and this why because we have here within our schema
+
+2362
+02:00:25,800 --> 02:00:28,600
+so we try to check and validate everything
+
+2363
+02:00:28,600 --> 02:00:30,700
+even if the endpoint
+
+2364
+02:00:32,300 --> 02:00:34,366
+even if the endpoint is secured
+
+2365
+02:00:34,533 --> 02:00:37,466
+so we get into this authentication filter
+
+2366
+02:00:37,466 --> 02:00:38,766
+we validate everything
+
+2367
+02:00:38,933 --> 02:00:39,366
+but
+
+2368
+02:00:39,366 --> 02:00:43,166
+once we get to the user details we don't have the user
+
+2369
+02:00:43,166 --> 02:00:44,333
+in the database
+
+2370
+02:00:44,366 --> 02:00:49,966
+so in that case we will send back a 403 to our customer
+
+2371
+02:00:50,100 --> 02:00:53,766
+OK so now let's create a new user
+
+2372
+02:00:53,766 --> 02:00:55,599
+so I will register a new user
+
+2373
+02:00:55,600 --> 02:00:58,600
+so I give it alibu as the 1st name alibu last name
+
+2374
+02:00:58,866 --> 02:01:03,333
+and alibu atmate com and 1234 as a password
+
+2375
+02:01:03,800 --> 02:01:06,866
+so now when I click the send button
+
+2376
+02:01:06,933 --> 02:01:08,299
+I should get a
+
+2377
+02:01:08,333 --> 02:01:11,899
+generator token or a JWT token as a response
+
+2378
+02:01:13,700 --> 02:01:16,333
+so this is what we see right here
+
+2379
+02:01:16,666 --> 02:01:18,899
+so I will just copy this
+
+2380
+02:01:19,300 --> 02:01:22,133
+token and I want to decode it
+
+2381
+02:01:22,133 --> 02:01:24,733
+and let's see what we have within this token
+
+2382
+02:01:26,000 --> 02:01:29,800
+so let's go back to the jwt.io website
+
+2383
+02:01:30,100 --> 02:01:33,166
+and paste the generated token in here
+
+2384
+02:01:33,300 --> 02:01:33,933
+so we
+
+2385
+02:01:33,933 --> 02:01:38,799
+see that we have the algorithm here which is the HS256
+
+2386
+02:01:38,800 --> 02:01:40,800
+the one we used to generate this token
+
+2387
+02:01:41,266 --> 02:01:43,199
+and we have our payload
+
+2388
+02:01:43,200 --> 02:01:45,133
+so we set already the subject
+
+2389
+02:01:45,300 --> 02:01:49,100
+to the user email and we have the issue at
+
+2390
+02:01:50,000 --> 02:01:53,066
+so the creation date and as you can see in here
+
+2391
+02:01:53,133 --> 02:01:55,066
+it was created December 29
+
+2392
+02:01:55,500 --> 02:02:01,000
+at 14 14 and this one will expire at in 24 hours
+
+2393
+02:02:01,000 --> 02:02:02,566
+okay so
+
+2394
+02:02:03,000 --> 02:02:04,666
+this is our generated token
+
+2395
+02:02:04,666 --> 02:02:08,333
+let's go back and test the authontication right now
+
+2396
+02:02:08,566 --> 02:02:10,666
+so we see that the register is working
+
+2397
+02:02:10,666 --> 02:02:12,266
+but let's ensure that
+
+2398
+02:02:12,366 --> 02:02:16,666
+within the same username and password we are also able
+
+2399
+02:02:16,900 --> 02:02:19,300
+to get a token or to generate a token
+
+2400
+02:02:19,300 --> 02:02:22,200
+so this is the same email and the password that we have
+
+2401
+02:02:22,500 --> 02:02:25,100
+and if I click on sand I should get the token
+
+2402
+02:02:25,100 --> 02:02:26,200
+but let's 1st
+
+2403
+02:02:26,600 --> 02:02:28,566
+dry with a wrong password
+
+2404
+02:02:28,566 --> 02:02:30,099
+so when they click on sand
+
+2405
+02:02:30,100 --> 02:02:33,500
+so here we have our 44 or 3
+
+2406
+02:02:33,900 --> 02:02:37,400
+and here it's because of this process
+
+2407
+02:02:37,400 --> 02:02:38,700
+so we have the token
+
+2408
+02:02:38,700 --> 02:02:41,566
+and then we start the validation process
+
+2409
+02:02:41,800 --> 02:02:43,933
+so we extract the username and password
+
+2410
+02:02:43,933 --> 02:02:46,766
+and then we are calling the user details
+
+2411
+02:02:46,900 --> 02:02:50,733
+service to try to fetch the user from the database
+
+2412
+02:02:51,133 --> 02:02:54,733
+and the user we got it because the user already exists
+
+2413
+02:02:54,733 --> 02:02:58,466
+but when we move to the security filter chain
+
+2414
+02:02:58,933 --> 02:03:02,199
+and to use when we move to security context holder
+
+2415
+02:03:02,200 --> 02:03:05,700
+we will try also to use the authontication manager
+
+2416
+02:03:05,700 --> 02:03:07,533
+to authonticate that user
+
+2417
+02:03:07,933 --> 02:03:09,599
+using the password
+
+2418
+02:03:09,733 --> 02:03:11,999
+and the user made that were provided
+
+2419
+02:03:12,066 --> 02:03:13,199
+within the request
+
+2420
+02:03:13,333 --> 02:03:15,533
+but this password is wrong
+
+2421
+02:03:15,533 --> 02:03:20,133
+so that's why we are also throwing a 403 as a response
+
+2422
+02:03:20,300 --> 02:03:24,166
+okay so now let's test with a correct password
+
+2423
+02:03:24,166 --> 02:03:25,866
+so if I click on sand
+
+2424
+02:03:26,466 --> 02:03:30,199
+I see that I have my JWT token
+
+2425
+02:03:30,366 --> 02:03:31,766
+I will copy this one
+
+2426
+02:03:32,666 --> 02:03:35,199
+and then I will go back to this
+
+2427
+02:03:35,533 --> 02:03:36,666
+get method
+
+2428
+02:03:36,666 --> 02:03:40,366
+I will click again and make sure that it's always 403
+
+2429
+02:03:41,266 --> 02:03:43,666
+and how we can authorize
+
+2430
+02:03:44,066 --> 02:03:47,499
+this request right now so within the authorization
+
+2431
+02:03:48,266 --> 02:03:52,333
+here within the type click and choose beer token
+
+2432
+02:03:52,366 --> 02:03:52,933
+alright
+
+2433
+02:03:52,933 --> 02:03:56,166
+so remove or delete if you have something in here
+
+2434
+02:03:56,333 --> 02:03:58,966
+and paste the token that you just
+
+2435
+02:03:59,400 --> 02:04:01,666
+copy it okay now click on sand
+
+2436
+02:04:01,733 --> 02:04:04,466
+and we see that we have the message
+
+2437
+02:04:04,566 --> 02:04:06,699
+hello from secured endpoint
+
+2438
+02:04:06,700 --> 02:04:08,266
+and we have this 200
+
+2439
+02:04:08,266 --> 02:04:12,966
+OK which which is compatible with all this process
+
+2440
+02:04:12,966 --> 02:04:15,333
+so we have the filter we validate
+
+2441
+02:04:15,533 --> 02:04:18,099
+everything we check the token user details
+
+2442
+02:04:18,133 --> 02:04:21,566
+and then we pass everything to security context holder
+
+2443
+02:04:21,666 --> 02:04:23,466
+we updated and then
+
+2444
+02:04:23,766 --> 02:04:26,866
+our request is sent to the dispatcher circulate
+
+2445
+02:04:26,866 --> 02:04:30,166
+hit the controller and then we get our response back
+
+2446
+02:04:30,866 --> 02:04:32,133
+so I hope
+
+2447
+02:04:32,766 --> 02:04:33,999
+this was clear
+
+2448
+02:04:34,366 --> 02:04:35,899
+if you have any questions
+
+2449
+02:04:35,900 --> 02:04:37,800
+don't hesitate to drop a comment
+
+2450
+02:04:37,966 --> 02:04:41,399
+and especially don't forget to follow me
+
+2451
+02:04:41,566 --> 02:04:45,266
+to learn more and more about spring boots
+
+2452
+02:04:54,333 --> 02:04:56,599
+oh key dokey congratulations
+
+2453
+02:04:56,666 --> 02:05:02,733
+now you know how to implement JDBT using spring boot
+
+2454
+02:05:02,966 --> 02:05:05,999
+3 which is the latest version of spring boot
+
+2455
+02:05:06,266 --> 02:05:07,966
+and spring security as well
+
+2456
+02:05:07,966 --> 02:05:09,966
+if you enjoyed this scratch course
+
+2457
+02:05:09,966 --> 02:05:13,099
+literally just take one 2nd and smash that like button
+
+2458
+02:05:13,366 --> 02:05:15,966
+also if you haven't subscribed to alibu channel
+
+2459
+02:05:15,966 --> 02:05:16,799
+go ahead and subscribe
+
+2460
+02:05:16,800 --> 02:05:17,166
+is go
+
+2461
+02:05:17,166 --> 02:05:21,199
+awesome content around spring boot java and Angela
+
+2462
+02:05:21,200 --> 02:05:22,166
+it was a pleasure
+
+2463
+02:05:22,466 --> 02:05:24,966
+this is all for now and I'll catch you on the next one
+
+2464
+02:05:24,966 --> 02:05:26,366
+I'll sell them while you go
